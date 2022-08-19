@@ -1,6 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "S148.Backend", "S148.Backend.csproj", "{33AD999D-E35C-418D-8C0B-63A696C3E9ED}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "S148.Backend", "S148.Backend\S148.Backend.csproj", "{2CADFB57-0468-40D1-AF6E-A429E5F2391A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "S148.Backend.Domain", "S148.Backend.Domain\S148.Backend.Domain.csproj", "{F6001248-ACD0-4417-B86C-77D43D87D403}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -8,9 +10,13 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{33AD999D-E35C-418D-8C0B-63A696C3E9ED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{33AD999D-E35C-418D-8C0B-63A696C3E9ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{33AD999D-E35C-418D-8C0B-63A696C3E9ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{33AD999D-E35C-418D-8C0B-63A696C3E9ED}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2CADFB57-0468-40D1-AF6E-A429E5F2391A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2CADFB57-0468-40D1-AF6E-A429E5F2391A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2CADFB57-0468-40D1-AF6E-A429E5F2391A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2CADFB57-0468-40D1-AF6E-A429E5F2391A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F6001248-ACD0-4417-B86C-77D43D87D403}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F6001248-ACD0-4417-B86C-77D43D87D403}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F6001248-ACD0-4417-B86C-77D43D87D403}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F6001248-ACD0-4417-B86C-77D43D87D403}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
