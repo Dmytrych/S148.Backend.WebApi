@@ -1,5 +1,5 @@
-﻿using System.Reflection;
-using Autofac;
+﻿using Autofac;
+using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using S148.Backend.AutofacModules;
@@ -34,6 +34,9 @@ namespace S148.Backend
         {
           builder.RegisterModule(module);
         }
+
+        var configuredContainer = builder.Build();
+        RegisterAutomapper(configuredContainer, builder);
       }
 
       public void Configure(
@@ -54,8 +57,21 @@ namespace S148.Backend
         });
 
         var context = new DatabaseContext();
-
         context.Database.Migrate();
+      }
+
+      private void RegisterAutomapper(IContainer scope, ContainerBuilder builder)
+      {
+        var profiles = scope.Resolve<IEnumerable<Profile>>();
+        var mapperConfig = new MapperConfiguration(mc =>
+        {
+          foreach (var profile in profiles)
+          {
+            mc.AddProfile(profile);
+          }
+        });
+
+        builder.Register(c => mapperConfig.CreateMapper()).As<IMapper>().SingleInstance();
       }
     }
 }

@@ -6,7 +6,6 @@ namespace S148.Backend.AutofacModules
     {
         protected override void Load(ContainerBuilder builder)
         {
-            
         }
     }
 }

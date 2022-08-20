@@ -58,13 +58,13 @@ public abstract class RestApiControllerBase<TRestModel, TServiceModel, TFilter> 
         throw new NotImplementedException();
     }
 
-    protected TRestModel Convert(TServiceModel serviceModel)
-    {
-        
-    }
-    
-    protected TServiceModel Convert(TRestModel restModel)
-    {
-        
-    }
+    // protected TRestModel Convert(TServiceModel serviceModel)
+    // {
+    //     
+    // }
+    //
+    // protected TServiceModel Convert(TRestModel restModel)
+    // {
+    //     
+    // }
 }

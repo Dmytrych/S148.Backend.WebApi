@@ -5,6 +5,6 @@ namespace S148.Backend.Shopping.RestApi.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class ProductsRestApiController : RestApiControllerBase<int>
+public class ProductsRestApiController : RestApiControllerBase<int, int, int>
 {
 }
