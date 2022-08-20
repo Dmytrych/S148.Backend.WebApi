@@ -1,0 +1,1 @@
+dotnet run --project  ./S148.Backend/S148.Backend.csproj

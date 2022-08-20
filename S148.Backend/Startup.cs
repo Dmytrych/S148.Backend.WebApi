@@ -1,11 +1,9 @@
-﻿using Autofac;
-using Microsoft.AspNetCore.Builder;
+﻿using System.Reflection;
+using Autofac;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
+using Microsoft.OpenApi.Models;
+using S148.Backend.AutofacModules;
 using S148.Backend.Domain;
-using S148.Backend.Utils;
 
 namespace S148.Backend
 {
@@ -22,26 +20,41 @@ namespace S148.Backend
       {
         services.AddMvc().AddControllersAsServices();
         services.AddOptions();
+        services.AddSwaggerGen(c =>
+        {
+          c.SwaggerDoc("v1", new OpenApiInfo { Title = "webApiGitTest", Version = "v1" });
+          c.EnableAnnotations();
+        });
       }
 
       public void ConfigureContainer(ContainerBuilder builder)
       {
-        builder.RegisterAllModules();
-
+        var modules = ModuleRegistry.GetAutofacModules();
+        foreach (var module in modules)
+        {
+          builder.RegisterModule(module);
+        }
       }
 
       public void Configure(
         IApplicationBuilder app,
-        ILoggerFactory loggerFactory)
+        IWebHostEnvironment env)
       {
+        if (env.IsDevelopment())
+        {
+          app.UseDeveloperExceptionPage();
+          app.UseSwagger();
+          app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "webApiGitTest v1"));
+        }
+        
         app.UseRouting();
         app.UseEndpoints(endpoints =>
         {
           endpoints.MapControllerRoute("default", "{controller=Home}/{action=Index}");
         });
-        using var scope = app.ApplicationServices.CreateScope();
-        using var context = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
-        context.Database.EnsureCreated();
+
+        var context = new DatabaseContext();
+
         context.Database.Migrate();
       }
     }

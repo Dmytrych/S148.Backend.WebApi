@@ -1,13 +1,18 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using S148.Backend.Domain.Dto;
 
 namespace S148.Backend.Domain;
 
 public interface IDatabaseContext
 {
-    public DbSet<Order> Orders { get; set; }
+    DbSet<Order> Orders { get; set; }
 
-    public DbSet<Customer> Customers { get; set; }
+    DbSet<Customer> Customers { get; set; }
 
-    public DbSet<Product> Products { get; set; }
+    DbSet<Product> Products { get; set; }
+    
+    DatabaseFacade Database { get; }
+
+    int SaveChanges();
 }

@@ -12,7 +12,7 @@ public class DatabaseContext : DbContext, IDatabaseContext
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         optionsBuilder.UseNpgsql(
-            @"host=localhost port=5432");
+            @"User ID=postgres;Password=karambol;Host=localhost;Port=5433;Database=S148_Server;");
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
