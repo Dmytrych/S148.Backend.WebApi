@@ -17,5 +17,8 @@ public class DatabaseContext : DbContext, IDatabaseContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<Product>().HasData(
+            new Product { Id = 1,Name = "S148 - 200мл", Price = "200UAH"},
+            new Product { Id = 2,Name = "S148 - 20мл", Price = "50UAH"});
     }
 }

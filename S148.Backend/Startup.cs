@@ -35,7 +35,6 @@ namespace S148.Backend
         {
           builder.RegisterModule(module);
         }
-        //RegisterAutomapper(builder);
         builder.RegisterAutoMapper(true);
       }
 
@@ -58,22 +57,6 @@ namespace S148.Backend
 
         var context = new DatabaseContext();
         context.Database.Migrate();
-      }
-
-      private void RegisterAutomapper(ContainerBuilder builder)
-      {
-        builder.Register(scope =>
-        {
-          var profiles = scope.Resolve<IEnumerable<Profile>>();
-          var mapperConfig = new MapperConfiguration(mc =>
-          {
-            foreach (var profile in profiles)
-            {
-              mc.AddProfile(profile);
-            }
-          });
-          return mapperConfig.CreateMapper();
-        }).As<IMapper>().SingleInstance();
       }
     }
 }
