@@ -6,4 +6,13 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\S148.Backend.RestApi.Extensibility\S148.Backend.RestApi.Extensibility.csproj" />
+      <ProjectReference Include="..\S148.Backend.Shopping.Extensibility\S148.Backend.Shopping.Extensibility.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Autofac" Version="6.4.0" />
+    </ItemGroup>
+
 </Project>

@@ -13,5 +13,7 @@
 
     <ItemGroup>
         <ProjectReference Include="..\S148.Backend.RestApi.Extensibility\S148.Backend.RestApi.Extensibility.csproj" />
+        <ProjectReference Include="..\S148.Backend.Shopping.Extensibility\S148.Backend.Shopping.Extensibility.csproj" />
+        <ProjectReference Include="..\S148.Backend.Shopping.Service\S148.Backend.Shopping.Service.csproj" />
     </ItemGroup>
 </Project>

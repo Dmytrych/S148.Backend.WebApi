@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using AutoMapper;
+using AutoMapper.Contrib.Autofac.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using S148.Backend.AutofacModules;
@@ -34,9 +35,8 @@ namespace S148.Backend
         {
           builder.RegisterModule(module);
         }
-
-        var configuredContainer = builder.Build();
-        RegisterAutomapper(configuredContainer, builder);
+        //RegisterAutomapper(builder);
+        builder.RegisterAutoMapper(true);
       }
 
       public void Configure(
@@ -49,7 +49,7 @@ namespace S148.Backend
           app.UseSwagger();
           app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "webApiGitTest v1"));
         }
-        
+
         app.UseRouting();
         app.UseEndpoints(endpoints =>
         {
@@ -60,18 +60,20 @@ namespace S148.Backend
         context.Database.Migrate();
       }
 
-      private void RegisterAutomapper(IContainer scope, ContainerBuilder builder)
+      private void RegisterAutomapper(ContainerBuilder builder)
       {
-        var profiles = scope.Resolve<IEnumerable<Profile>>();
-        var mapperConfig = new MapperConfiguration(mc =>
+        builder.Register(scope =>
         {
-          foreach (var profile in profiles)
+          var profiles = scope.Resolve<IEnumerable<Profile>>();
+          var mapperConfig = new MapperConfiguration(mc =>
           {
-            mc.AddProfile(profile);
-          }
-        });
-
-        builder.Register(c => mapperConfig.CreateMapper()).As<IMapper>().SingleInstance();
+            foreach (var profile in profiles)
+            {
+              mc.AddProfile(profile);
+            }
+          });
+          return mapperConfig.CreateMapper();
+        }).As<IMapper>().SingleInstance();
       }
     }
 }
