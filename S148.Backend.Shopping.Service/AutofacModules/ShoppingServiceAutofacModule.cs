@@ -4,6 +4,7 @@ using S148.Backend.RestApi.Extensibility;
 using S148.Backend.Shopping.Extensibility.Models.Filters;
 using S148.Backend.Shopping.Extensibility.Models.Service;
 using S148.Backend.Shopping.Service.MappingProfiles;
+using S148.Backend.Shopping.Service.Repositories;
 using S148.Backend.Shopping.Service.Rest.Repositories;
 using S148.Backend.Shopping.Service.Rest.Services;
 using S148.Backend.Shopping.Service.Validators;
@@ -26,10 +27,14 @@ public class ShoppingServiceAutofacModule : Module
         builder.RegisterType<ProductCrudRepository>().As<ICrudRepository<ProductServiceModel, ProductFilter>>();
         builder.RegisterType<OrderCrudRepository>().As<ICrudRepository<OrderServiceModel, ProductFilter>>();
         builder.RegisterType<CustomerCrudRepository>().As<ICrudRepository<CustomerServiceModel, ProductFilter>>();
+
+        builder.RegisterType<ProductRepository>().As<IProductRepository>();
     }
 
     private void BindValidators(ContainerBuilder builder)
     {
         builder.RegisterType<EmailValidator>().As<IEmailValidator>();
+        builder.RegisterType<PhoneValidator>().As<IPhoneValidator>();
+        builder.RegisterType<CustomerInfoValidator>().As<ICustomerInfoValidator>();
     }
 }

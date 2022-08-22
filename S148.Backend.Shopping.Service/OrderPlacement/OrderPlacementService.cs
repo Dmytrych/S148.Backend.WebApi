@@ -1,8 +1,11 @@
-﻿using S148.Backend.RestApi.Extensibility;
+﻿using AutoMapper;
+using S148.Backend.RestApi.Extensibility;
 using S148.Backend.Shopping.Extensibility.Models.Filters;
 using S148.Backend.Shopping.Extensibility.Models.Service;
 using S148.Backend.Shopping.Extensibility.OrderPlacement;
 using S148.Backend.Shopping.Extensibility.OrderPlacement.Models;
+using S148.Backend.Shopping.Service.Repositories;
+using S148.Backend.Shopping.Service.Validators;
 
 namespace S148.Backend.Shopping.Service.OrderPlacement;
 
@@ -11,19 +14,74 @@ internal class OrderPlacementService : IOrderPlacementService
     private readonly ICrudRepository<CustomerServiceModel, CustomerFilter> customerRepository;
     private readonly ICrudRepository<OrderServiceModel, CustomerFilter> orderRepository;
     private readonly ICrudRepository<OrderDetailsServiceModel, CustomerFilter> orderDetailsRepository;
+    private readonly ICustomerInfoValidator customerInfoValidator;
+    private readonly IProductRepository productRepository;
+    private readonly IMapper mapper;
 
     public OrderPlacementService(
         ICrudRepository<CustomerServiceModel, CustomerFilter> customerRepository,
         ICrudRepository<OrderServiceModel, CustomerFilter> orderRepository,
-        ICrudRepository<OrderDetailsServiceModel, CustomerFilter> orderDetailsRepository)
+        ICrudRepository<OrderDetailsServiceModel, CustomerFilter> orderDetailsRepository,
+        ICustomerInfoValidator customerInfoValidator,
+        IProductRepository productRepository,
+        IMapper mapper)
     {
         this.customerRepository = customerRepository;
         this.orderRepository = orderRepository;
         this.orderDetailsRepository = orderDetailsRepository;
+        this.customerInfoValidator = customerInfoValidator;
+        this.productRepository = productRepository;
+        this.mapper = mapper;
     }
 
     public Guid Create(CustomerInfoDto customerInfo, IReadOnlyCollection<ProductOrderingInfo> products)
     {
+        if (!products.Any())
+        {
+            throw new ArgumentException();
+        }
+        
+        var customerValidationResult = customerInfoValidator.Validate(customerInfo);
 
+        if (!customerValidationResult.IsValid)
+        {
+            throw new ArgumentException();
+        }
+
+        var allProductIds = productRepository.GetAll();
+        if (products.All(product => allProductIds.Contains(product.ProductId)))
+        {
+            throw new ArgumentException();
+        }
+
+        if (products.DistinctBy(p => p.ProductId).Count() != products.Count)
+        {
+            throw new ArgumentException();
+        }
+
+        var customer = mapper.Map<CustomerInfoDto, CustomerServiceModel>(customerInfo);
+
+        var customerModel = customerRepository.Create(customer);
+
+        var order = new OrderServiceModel
+        {
+            CustomerId = customerModel.Id
+        };
+        var orderModel = orderRepository.Create(order);
+
+        var createdOrderDetails = new List<OrderDetailsServiceModel>();
+        foreach (var product in products)
+        {
+            var orderDetails = new OrderDetailsServiceModel
+            {
+                OrderId = orderModel.Id,
+                ProductId = product.ProductId,
+                Quantity = product.Quantity,
+                UnitPrice = productRepository.GetPrice(product.ProductId) ??
+                            throw new ArgumentException("Product was not found")
+            };
+
+            createdOrderDetails.Add(orderDetailsRepository.Create(orderDetails));
+        }
     }
 }

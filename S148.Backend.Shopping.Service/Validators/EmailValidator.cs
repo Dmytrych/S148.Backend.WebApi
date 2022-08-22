@@ -2,7 +2,7 @@
 
 namespace S148.Backend.Shopping.Service.Validators;
 
-public class EmailValidator : IEmailValidator
+internal class EmailValidator : IEmailValidator
 {
     public bool Validate(string email)
     {
