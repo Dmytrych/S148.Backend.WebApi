@@ -11,7 +11,9 @@ public interface IDatabaseContext
     DbSet<Customer> Customers { get; set; }
 
     DbSet<Product> Products { get; set; }
-    
+
+    DbSet<OrderDetails> OrderDetails { get; set; }
+
     DatabaseFacade Database { get; }
 
     int SaveChanges();

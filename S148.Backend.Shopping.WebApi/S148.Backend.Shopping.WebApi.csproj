@@ -15,5 +15,6 @@
 
     <ItemGroup>
         <ProjectReference Include="..\S148.Backend.Domain\S148.Backend.Domain.csproj" />
+        <ProjectReference Include="..\S148.Backend.Shopping.Extensibility\S148.Backend.Shopping.Extensibility.csproj" />
     </ItemGroup>
 </Project>

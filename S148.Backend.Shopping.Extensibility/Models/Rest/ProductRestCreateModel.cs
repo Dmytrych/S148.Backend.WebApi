@@ -4,5 +4,5 @@ public class ProductRestCreateModel
 {
     public int Name { get; set; }
 
-    public int Price { get; set; }
+    public float Price { get; set; }
 }
