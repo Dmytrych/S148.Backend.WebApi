@@ -4,5 +4,5 @@ namespace S148.Backend.Shopping.Extensibility.OrderPlacement;
 
 public interface IOrderPlacementService
 {
-    Guid Create(CustomerInfoDto customerInfo, IReadOnlyCollection<ProductOrderingInfo> products);
+    OrderPlacementResponse Create(CustomerInfoDto customerInfo, IReadOnlyCollection<ProductOrderingInfo> products);
 }

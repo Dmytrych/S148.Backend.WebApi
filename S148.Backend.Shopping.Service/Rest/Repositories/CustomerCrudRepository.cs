@@ -29,8 +29,9 @@ public class CustomerCrudRepository : CrudRepositoryBase<CustomerServiceModel, C
         throw new NotImplementedException();
     }
 
-    public override IReadOnlyCollection<CustomerServiceModel> GetAll(CustomerFilter model)
+    public override IReadOnlyCollection<CustomerServiceModel> GetAll(CustomerFilter filter)
     {
-        throw new NotImplementedException();
+        var filteredModels = databaseContext.Customers.Where(customer => filter.Id.Any(idFilter => idFilter == customer.Id));
+        return filteredModels.Select(x => Convert(x)).ToList();
     }
 }

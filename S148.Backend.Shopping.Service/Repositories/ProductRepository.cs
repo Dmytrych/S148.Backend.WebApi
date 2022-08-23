@@ -5,7 +5,7 @@ namespace S148.Backend.Shopping.Service.Repositories;
 public class ProductRepository : IProductRepository
 {
     private readonly IDatabaseContext databaseContext;
-    
+
     public ProductRepository(IDatabaseContext databaseContext)
     {
         this.databaseContext = databaseContext;
@@ -13,7 +13,7 @@ public class ProductRepository : IProductRepository
 
     public IReadOnlyCollection<int> GetAll()
         => databaseContext.Products.Select(p => p.Id).ToList();
-    
-    public float? GetPrice(int id)
+
+    public decimal? GetPrice(int id)
         => databaseContext.Products.FirstOrDefault(p => p.Id == id)?.UnitPrice;
 }

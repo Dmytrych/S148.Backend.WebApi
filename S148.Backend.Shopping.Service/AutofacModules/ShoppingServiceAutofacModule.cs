@@ -4,6 +4,7 @@ using S148.Backend.RestApi.Extensibility;
 using S148.Backend.Shopping.Extensibility.Models.Filters;
 using S148.Backend.Shopping.Extensibility.Models.Service;
 using S148.Backend.Shopping.Service.MappingProfiles;
+using S148.Backend.Shopping.Service.OrderPlacement;
 using S148.Backend.Shopping.Service.Repositories;
 using S148.Backend.Shopping.Service.Rest.Repositories;
 using S148.Backend.Shopping.Service.Rest.Services;
@@ -20,13 +21,20 @@ public class ShoppingServiceAutofacModule : Module
 
         BindRepositories(builder);
         BindValidators(builder);
+        BindCounters(builder);
+    }
+
+    private void BindCounters(ContainerBuilder builder)
+    {
+        builder.RegisterType<OrderPriceCounter>().As<IOrderPriceCounter>();
     }
 
     private void BindRepositories(ContainerBuilder builder)
     {
         builder.RegisterType<ProductCrudRepository>().As<ICrudRepository<ProductServiceModel, ProductFilter>>();
-        builder.RegisterType<OrderCrudRepository>().As<ICrudRepository<OrderServiceModel, ProductFilter>>();
-        builder.RegisterType<CustomerCrudRepository>().As<ICrudRepository<CustomerServiceModel, ProductFilter>>();
+        builder.RegisterType<OrderCrudRepository>().As<ICrudRepository<OrderServiceModel, OrderFilter>>();
+        builder.RegisterType<CustomerCrudRepository>().As<ICrudRepository<CustomerServiceModel, CustomerFilter>>();
+        builder.RegisterType<OrderDetailsCrudRepository>().As<ICrudRepository<OrderDetailsServiceModel, OrderDetailsFilter>>();
 
         builder.RegisterType<ProductRepository>().As<IProductRepository>();
     }

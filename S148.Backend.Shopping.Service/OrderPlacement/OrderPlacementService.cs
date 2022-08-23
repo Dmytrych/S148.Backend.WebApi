@@ -16,6 +16,7 @@ internal class OrderPlacementService : IOrderPlacementService
     private readonly ICrudRepository<OrderDetailsServiceModel, CustomerFilter> orderDetailsRepository;
     private readonly ICustomerInfoValidator customerInfoValidator;
     private readonly IProductRepository productRepository;
+    private readonly IOrderPriceCounter orderPriceCounter;
     private readonly IMapper mapper;
 
     public OrderPlacementService(
@@ -24,6 +25,7 @@ internal class OrderPlacementService : IOrderPlacementService
         ICrudRepository<OrderDetailsServiceModel, CustomerFilter> orderDetailsRepository,
         ICustomerInfoValidator customerInfoValidator,
         IProductRepository productRepository,
+        IOrderPriceCounter orderPriceCounter,
         IMapper mapper)
     {
         this.customerRepository = customerRepository;
@@ -31,16 +33,17 @@ internal class OrderPlacementService : IOrderPlacementService
         this.orderDetailsRepository = orderDetailsRepository;
         this.customerInfoValidator = customerInfoValidator;
         this.productRepository = productRepository;
+        this.orderPriceCounter = orderPriceCounter;
         this.mapper = mapper;
     }
 
-    public Guid Create(CustomerInfoDto customerInfo, IReadOnlyCollection<ProductOrderingInfo> products)
+    public OrderPlacementResponse Create(CustomerInfoDto customerInfo, IReadOnlyCollection<ProductOrderingInfo> products)
     {
         if (!products.Any())
         {
             throw new ArgumentException();
         }
-        
+
         var customerValidationResult = customerInfoValidator.Validate(customerInfo);
 
         if (!customerValidationResult.IsValid)
@@ -83,5 +86,13 @@ internal class OrderPlacementService : IOrderPlacementService
 
             createdOrderDetails.Add(orderDetailsRepository.Create(orderDetails));
         }
+
+        var totalPrice = orderPriceCounter.GetTotalPrice(createdOrderDetails);
+
+        return new OrderPlacementResponse
+        {
+            OrderId = orderModel.Id,
+            TotalPrice = totalPrice
+        };
     }
 }

@@ -2,5 +2,5 @@
 
 public class CustomerFilter
 {
-    
+    public IReadOnlyCollection<int> Id { get; set; }
 }

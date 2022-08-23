@@ -4,5 +4,5 @@ public interface IProductRepository
 {
     IReadOnlyCollection<int> GetAll();
 
-    float? GetPrice(int id);
+    decimal? GetPrice(int id);
 }

@@ -2,9 +2,9 @@
 
 namespace S148.Backend.Shopping.Service.OrderPlacement;
 
-public class OrderPriceCounter
+internal class OrderPriceCounter : IOrderPriceCounter
 {
-    public float GetTotalPrice(IReadOnlyCollection<OrderDetailsServiceModel> orderDetails)
+    public decimal GetTotalPrice(IReadOnlyCollection<OrderDetailsServiceModel> orderDetails)
     {
         decimal total = 0;
 
@@ -12,5 +12,7 @@ public class OrderPriceCounter
         {
             total = detail.Quantity * detail.UnitPrice;
         }
+
+        return total;
     }
 }
