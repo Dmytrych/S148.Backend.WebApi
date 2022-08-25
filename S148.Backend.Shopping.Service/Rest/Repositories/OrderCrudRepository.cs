@@ -22,12 +22,20 @@ public class OrderCrudRepository : CrudRepositoryBase<OrderServiceModel, Order, 
 
     public override IReadOnlyCollection<OrderServiceModel> GetAll(OrderFilter model)
     {
-        throw new NotImplementedException();
+        IQueryable<Order> orders = databaseContext.Orders;
+        
+        if (model.Id.Any())
+        {
+            orders = orders.Where(c => model.Id.Any(id => id == c.Id));
+        }
+
+        return orders.Select(c => Convert(c)).ToList();
     }
 
-    public OrderServiceModel Get(int identifier)
+    public OrderServiceModel? Get(int identifier)
     {
-        throw new NotImplementedException();
+        var entity = databaseContext.Orders.FirstOrDefault(o => o.Id == identifier);
+        return entity != null ? Convert(entity) : null;
     }
 
     public bool Delete(int id)

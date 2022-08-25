@@ -24,9 +24,9 @@ internal class CustomerInfoValidator : ICustomerInfoValidator
         var trimmedName = customerInfo.Name.Trim();
         var trimmedSurname = customerInfo.Name.Trim();
         var trimmedMiddleName = customerInfo.Name.Trim();
-        if (!string.IsNullOrEmpty(trimmedName) 
-            || !string.IsNullOrEmpty(trimmedSurname)
-            || !string.IsNullOrEmpty(trimmedMiddleName))
+        if (string.IsNullOrEmpty(trimmedName) 
+            || string.IsNullOrEmpty(trimmedSurname)
+            || string.IsNullOrEmpty(trimmedMiddleName))
         {
             throw new ArgumentException();
         }

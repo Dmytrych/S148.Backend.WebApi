@@ -4,7 +4,7 @@ namespace S148.Backend.Shopping.WebApi.Controllers.Dto;
 
 public class OrderPlacementRequestModel
 {
-    public CustomerInfoDto CustomerInfo { get; }
+    public CustomerInfoDto CustomerInfo { get; set; }
 
     public IReadOnlyCollection<ProductOrderingInfo> Products { get; set; }
 }

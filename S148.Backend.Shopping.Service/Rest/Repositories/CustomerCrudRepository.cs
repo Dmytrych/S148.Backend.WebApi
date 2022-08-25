@@ -26,9 +26,11 @@ public class CustomerCrudRepository : CrudRepositoryBase<CustomerServiceModel, C
         return filteredModels.Select(x => Convert(x)).ToList();
     }
 
-    public CustomerServiceModel Get(int identifier)
+    public CustomerServiceModel? Get(int identifier)
     {
-        throw new NotImplementedException();
+        var entity = databaseContext.Customers.FirstOrDefault(c => c.Id == identifier);
+
+        return entity != null ? Convert(entity) : null;
     }
 
     public bool Delete(int id)

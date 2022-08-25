@@ -2,5 +2,5 @@
 
 public interface IGetCrudRepository<TServiceModel, TIdentifierContainer>
 {
-    TServiceModel Get(TIdentifierContainer identifier);
+    TServiceModel? Get(TIdentifierContainer identifier);
 }

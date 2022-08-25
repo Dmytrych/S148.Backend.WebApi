@@ -51,7 +51,7 @@ internal class OrderPlacementService : IOrderPlacementService
         }
 
         var allProductIds = productRepository.GetAll();
-        if (products.All(product => allProductIds.Contains(product.ProductId)))
+        if (!products.All(product => allProductIds.Contains(product.ProductId)))
         {
             throw new ArgumentException();
         }

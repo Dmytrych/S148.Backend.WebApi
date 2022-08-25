@@ -34,10 +34,10 @@ public class ProductCrudRepository : CrudRepositoryBase<ProductServiceModel, Pro
         return products.Select(p => Convert(p)).ToList();
     }
 
-    public ProductServiceModel Get(int identifier)
+    public ProductServiceModel? Get(int identifier)
     {
         var foundEntity = databaseContext.Products.FirstOrDefault(p => p.Id == identifier);
-        return (foundEntity != null ? Convert(foundEntity) : null)!;
+        return foundEntity != null ? Convert(foundEntity) : null;
     }
 
     public bool Delete(int id)

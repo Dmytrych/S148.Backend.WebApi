@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Microsoft.EntityFrameworkCore;
 using S148.Backend.Domain;
 using S148.Backend.Domain.Dto;
 using S148.Backend.RestApi.Extensibility.Repositories;
@@ -12,7 +11,8 @@ namespace S148.Backend.Shopping.Service.Rest.Repositories;
 
 public class OrderDetailsCrudRepository : CrudRepositoryBase<OrderDetailsServiceModel, OrderDetails, OrderDetailsFilter>, IOrderDetailsCrudRepository
 {
-    public OrderDetailsCrudRepository(IMapper mapper, DbSet<OrderDetails> entities, IDatabaseContext databaseContext) : base(mapper, entities, databaseContext)
+    public OrderDetailsCrudRepository(IMapper mapper, IDatabaseContext databaseContext)
+        : base(mapper, databaseContext.OrderDetails, databaseContext)
     {
     }
 
@@ -39,7 +39,7 @@ public class OrderDetailsCrudRepository : CrudRepositoryBase<OrderDetailsService
         return orderDetails.Select(od => Convert(od)).ToList();
     }
 
-    public OrderDetailsServiceModel Get(OrderDetailsIdentifierContainer identifier)
+    public OrderDetailsServiceModel? Get(OrderDetailsIdentifierContainer identifier)
     {
         var entity = databaseContext.OrderDetails.FirstOrDefault(od =>
             od.OrderId == identifier.OrderId && od.ProductId == identifier.ProductId);

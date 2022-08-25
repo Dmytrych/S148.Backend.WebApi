@@ -1,4 +1,5 @@
-﻿using Autofac;
+﻿using System.Reflection;
+using Autofac;
 using AutoMapper;
 using AutoMapper.Contrib.Autofac.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
@@ -20,7 +21,7 @@ namespace S148.Backend
       public void ConfigureServices(IServiceCollection services)
       {
         services.AddMvc().AddControllersAsServices();
-        services.AddOptions();
+        services.AddOptions();;
         services.AddSwaggerGen(c =>
         {
           c.SwaggerDoc("v1", new OpenApiInfo { Title = "webApiGitTest", Version = "v1" });
@@ -35,7 +36,9 @@ namespace S148.Backend
         {
           builder.RegisterModule(module);
         }
-        builder.RegisterAutoMapper(true);
+
+        var assem = AppDomain.CurrentDomain.GetAssemblies();
+        builder.RegisterAutoMapper(true, assem);
       }
 
       public void Configure(
@@ -48,6 +51,15 @@ namespace S148.Backend
           app.UseSwagger();
           app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "webApiGitTest v1"));
         }
+        
+        app.UseExceptionHandler("/Error");
+        app.UseHsts();
+
+        var builder = WebApplication.CreateBuilder();
+        builder.Host.ConfigureLogging(logging =>
+        {
+          logging.AddConsole();
+        });
 
         app.UseRouting();
         app.UseEndpoints(endpoints =>
