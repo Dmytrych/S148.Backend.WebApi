@@ -15,6 +15,8 @@ public class OrderPlacementApiController : ControllerBase
         this.orderPlacementService = orderPlacementService;
     }
 
+    [HttpPost]
+    [Route("[action]")]
     public IActionResult Create(OrderPlacementRequestModel requestModel)
     {
         try

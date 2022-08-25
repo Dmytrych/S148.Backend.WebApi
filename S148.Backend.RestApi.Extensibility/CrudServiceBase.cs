@@ -1,4 +1,5 @@
 ﻿using S148.Backend.Extensibility;
+using S148.Backend.RestApi.Extensibility.Repositories;
 
 namespace S148.Backend.RestApi.Extensibility;
 
@@ -6,7 +7,7 @@ public abstract class CrudServiceBase<TServiceModel, TFilter> : ICrudService<TSe
 {
     private readonly ICrudRepository<TServiceModel, TFilter> crudRepository;
     
-    public CrudServiceBase(ICrudRepository<TServiceModel, TFilter> crudRepository)
+    protected CrudServiceBase(ICrudRepository<TServiceModel, TFilter> crudRepository)
     {
         this.crudRepository = crudRepository;
     }
@@ -26,9 +27,8 @@ public abstract class CrudServiceBase<TServiceModel, TFilter> : ICrudService<TSe
         throw new NotImplementedException();
     }
 
-    public TServiceModel Get(int id)
-        => crudRepository.Get(id);
-    
+    public abstract TServiceModel Get(int id);
+
     public IReadOnlyCollection<TServiceModel> GetAll(TFilter model)
     {
         throw new NotImplementedException();

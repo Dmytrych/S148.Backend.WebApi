@@ -2,5 +2,5 @@
 
 public class OrderFilter
 {
-    
+    public IReadOnlyCollection<int> Id { get; set; }
 }

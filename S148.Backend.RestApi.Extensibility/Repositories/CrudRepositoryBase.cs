@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using S148.Backend.Domain;
 
-namespace S148.Backend.RestApi.Extensibility;
+namespace S148.Backend.RestApi.Extensibility.Repositories;
 
 public abstract class CrudRepositoryBase<TServiceModel, TEntity, TFilter> : ICrudRepository<TServiceModel, TFilter>
     where TEntity : class
@@ -27,10 +27,6 @@ public abstract class CrudRepositoryBase<TServiceModel, TEntity, TFilter> : ICru
     }
 
     public abstract TServiceModel Update(TServiceModel model);
-
-    public abstract bool Delete(int id);
-
-    public abstract TServiceModel Get(int id);
 
     public abstract IReadOnlyCollection<TServiceModel> GetAll(TFilter model);
 

@@ -1,9 +1,8 @@
 ﻿using AutoMapper;
-using S148.Backend.RestApi.Extensibility;
-using S148.Backend.Shopping.Extensibility.Models.Filters;
 using S148.Backend.Shopping.Extensibility.Models.Service;
 using S148.Backend.Shopping.Extensibility.OrderPlacement;
 using S148.Backend.Shopping.Extensibility.OrderPlacement.Models;
+using S148.Backend.Shopping.Extensibility.Repositories;
 using S148.Backend.Shopping.Service.Repositories;
 using S148.Backend.Shopping.Service.Validators;
 
@@ -11,18 +10,18 @@ namespace S148.Backend.Shopping.Service.OrderPlacement;
 
 internal class OrderPlacementService : IOrderPlacementService
 {
-    private readonly ICrudRepository<CustomerServiceModel, CustomerFilter> customerRepository;
-    private readonly ICrudRepository<OrderServiceModel, CustomerFilter> orderRepository;
-    private readonly ICrudRepository<OrderDetailsServiceModel, CustomerFilter> orderDetailsRepository;
+    private readonly ICustomerCrudRepository customerRepository;
+    private readonly IOrderCrudRepository orderRepository;
+    private readonly IOrderDetailsCrudRepository orderDetailsRepository;
     private readonly ICustomerInfoValidator customerInfoValidator;
     private readonly IProductRepository productRepository;
     private readonly IOrderPriceCounter orderPriceCounter;
     private readonly IMapper mapper;
 
     public OrderPlacementService(
-        ICrudRepository<CustomerServiceModel, CustomerFilter> customerRepository,
-        ICrudRepository<OrderServiceModel, CustomerFilter> orderRepository,
-        ICrudRepository<OrderDetailsServiceModel, CustomerFilter> orderDetailsRepository,
+        ICustomerCrudRepository customerRepository,
+        IOrderCrudRepository orderRepository,
+        IOrderDetailsCrudRepository orderDetailsRepository,
         ICustomerInfoValidator customerInfoValidator,
         IProductRepository productRepository,
         IOrderPriceCounter orderPriceCounter,

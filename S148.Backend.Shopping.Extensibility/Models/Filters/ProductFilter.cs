@@ -1,6 +1,8 @@
-﻿namespace S148.Backend.Shopping.Extensibility.Models.Filters;
+﻿using S148.Backend.RestApi.Extensibility.Filters;
+
+namespace S148.Backend.Shopping.Extensibility.Models.Filters;
 
 public class ProductFilter
 {
-    public IReadOnlyCollection<int> Id { get; set; } = new List<int>();
+    public CollectionFilter<int> IdFilter { get; set; }
 }
