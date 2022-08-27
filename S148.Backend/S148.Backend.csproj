@@ -21,6 +21,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\S148.Backend.Domain\S148.Backend.Domain.csproj" />
+      <ProjectReference Include="..\S148.Backend.NovaPoshta.Service\S148.Backend.NovaPoshta.Service.csproj" />
       <ProjectReference Include="..\S148.Backend.Shopping.Module\S148.Backend.Shopping.Module.csproj" />
     </ItemGroup>
 </Project>

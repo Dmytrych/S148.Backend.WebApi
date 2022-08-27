@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using S148.Backend.Domain.AutofacModules;
+using S148.Backend.NovaPoshta.Service.AutofacModules;
 using S148.Backend.Shopping.Service.AutofacModules;
 
 namespace S148.Backend.AutofacModules;
@@ -11,6 +12,7 @@ public static class ModuleRegistry
         {
             new BackendAutofacModule(),
             new BackendDomainAutofacModule(),
-            new ShoppingServiceAutofacModule()
+            new ShoppingServiceAutofacModule(),
+            new NovaPoshtaServiceAutofacModule()
         };
 }
