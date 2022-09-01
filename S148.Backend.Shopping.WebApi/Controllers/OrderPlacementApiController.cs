@@ -21,7 +21,7 @@ public class OrderPlacementApiController : ControllerBase
     {
         try
         {
-            var result = orderPlacementService.Create(requestModel.CustomerInfo, requestModel.Products);
+            var result = orderPlacementService.Create(requestModel.CustomerInfo, requestModel.Products, requestModel.CityId, requestModel.WarehouseNumber);
             return Ok(result);
         }
         catch

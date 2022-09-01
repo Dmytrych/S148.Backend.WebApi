@@ -2,7 +2,7 @@
 using S148.Backend.Shopping.Extensibility.Models.Service;
 using S148.Backend.Shopping.Extensibility.OrderPlacement.Models;
 
-namespace S148.Backend.Shopping.Service.Mapping;
+namespace S148.Backend.Shopping.Service.MappingProfiles;
 
 public class CustomerInfoDtoMappingProfile : Profile
 {

@@ -1,16 +1,19 @@
-﻿using System.Reflection;
+﻿using System.Text;
 using Autofac;
-using AutoMapper;
 using AutoMapper.Contrib.Autofac.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using NovaPoshtaApi;
 using S148.Backend.AutofacModules;
 using S148.Backend.Domain;
+using S148.Backend.Extensibility.NovaPoshta;
 
 namespace S148.Backend
 {
     public class Startup
     {
+      private const string NovaPoshtaApiKeyToken = "NovaPoshtaApiKey";
+
       public Startup(IConfiguration configuration)
       {
         Configuration = configuration;
@@ -20,6 +23,10 @@ namespace S148.Backend
 
       public void ConfigureServices(IServiceCollection services)
       {
+        EncodingProvider provider = CodePagesEncodingProvider.Instance;
+        Encoding.RegisterProvider(provider);
+
+        services.AddDbContext<DatabaseContext>();
         services.AddMvc().AddControllersAsServices();
         services.AddOptions();;
         services.AddSwaggerGen(c =>
@@ -31,7 +38,7 @@ namespace S148.Backend
 
       public void ConfigureContainer(ContainerBuilder builder)
       {
-        var modules = ModuleRegistry.GetAutofacModules();
+        var modules = ModuleRegistry.GetAutofacModules(Configuration);
         foreach (var module in modules)
         {
           builder.RegisterModule(module);
@@ -39,6 +46,8 @@ namespace S148.Backend
 
         var assem = AppDomain.CurrentDomain.GetAssemblies();
         builder.RegisterAutoMapper(true, assem);
+
+        builder.Register(x => new ApiConnection(Configuration[NovaPoshtaApiKeyToken], NovaPoshtaClient.BaseUri)).As<IApiConnection>();
       }
 
       public void Configure(
@@ -67,7 +76,7 @@ namespace S148.Backend
           endpoints.MapControllerRoute("default", "{controller=Home}/{action=Index}");
         });
 
-        var context = new DatabaseContext();
+        var context = new DatabaseContext(Configuration);
         context.Database.Migrate();
       }
     }

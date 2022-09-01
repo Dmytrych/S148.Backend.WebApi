@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\S148.Backend.NovaPoshta.Extensibility\S148.Backend.NovaPoshta.Extensibility.csproj" />
+        <ProjectReference Include="..\S148.Backend.NovaPoshta.Service\S148.Backend.NovaPoshta.Service.csproj" />
+        <ProjectReference Include="..\S148.Backend.NovaPoshta.WebApi\S148.Backend.NovaPoshta.WebApi.csproj" />
+        <ProjectReference Include="..\S148.Backend.NovaPoshta.Domain\S148.Backend.NovaPoshta.Domain.csproj" />
+    </ItemGroup>
+
+</Project>

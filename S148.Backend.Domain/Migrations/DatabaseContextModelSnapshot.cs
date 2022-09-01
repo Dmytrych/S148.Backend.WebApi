@@ -17,7 +17,7 @@ namespace S148.Backend.Domain.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.7")
+                .HasAnnotation("ProductVersion", "6.0.8")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -55,6 +55,47 @@ namespace S148.Backend.Domain.Migrations
                     b.ToTable("Customers");
                 });
 
+            modelBuilder.Entity("S148.Backend.Domain.Dto.DeliveryInfo", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("AreaName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("AreaRef")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("CityName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("CityRef")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("CityType")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("WarehouseDescription")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("WarehouseNumber")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("DeliveryInfo");
+                });
+
             modelBuilder.Entity("S148.Backend.Domain.Dto.Order", b =>
                 {
                     b.Property<int>("Id")
@@ -66,9 +107,14 @@ namespace S148.Backend.Domain.Migrations
                     b.Property<int>("CustomerId")
                         .HasColumnType("integer");
 
+                    b.Property<int>("DeliveryInfoId")
+                        .HasColumnType("integer");
+
                     b.HasKey("Id");
 
                     b.HasIndex("CustomerId");
+
+                    b.HasIndex("DeliveryInfoId");
 
                     b.ToTable("Orders");
                 });
@@ -139,7 +185,15 @@ namespace S148.Backend.Domain.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("S148.Backend.Domain.Dto.DeliveryInfo", "DeliveryInfo")
+                        .WithMany()
+                        .HasForeignKey("DeliveryInfoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Customer");
+
+                    b.Navigation("DeliveryInfo");
                 });
 
             modelBuilder.Entity("S148.Backend.Domain.Dto.OrderDetails", b =>

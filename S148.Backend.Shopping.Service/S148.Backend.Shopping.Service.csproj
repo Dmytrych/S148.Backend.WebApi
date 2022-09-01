@@ -7,6 +7,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\S148.Backend.NovaPoshta.Module\S148.Backend.NovaPoshta.Module.csproj" />
       <ProjectReference Include="..\S148.Backend.RestApi.Extensibility\S148.Backend.RestApi.Extensibility.csproj" />
       <ProjectReference Include="..\S148.Backend.Shopping.Extensibility\S148.Backend.Shopping.Extensibility.csproj" />
     </ItemGroup>

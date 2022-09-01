@@ -20,6 +20,7 @@ public class ShoppingServiceAutofacModule : Module
     {
         builder.RegisterType<ProductMappingProfile>().As<Profile>();
         builder.RegisterType<ProductCrudService>().As<ICrudService<ProductServiceModel, ProductFilter>>();
+        builder.RegisterType<OrderCreator>().As<IOrderCreator>();
 
         BindRepositories(builder);
         BindValidators(builder);
@@ -43,6 +44,7 @@ public class ShoppingServiceAutofacModule : Module
         builder.RegisterType<OrderCrudRepository>().As<IOrderCrudRepository>();
         builder.RegisterType<CustomerCrudRepository>().As<ICustomerCrudRepository>();
         builder.RegisterType<OrderDetailsCrudRepository>().As<IOrderDetailsCrudRepository>();
+        builder.RegisterType<DeliveryInfoCrudRepository>().As<IDeliveryInfoCrudRepository>();
 
         builder.RegisterType<ProductRepository>().As<IProductRepository>();
     }
@@ -52,5 +54,6 @@ public class ShoppingServiceAutofacModule : Module
         builder.RegisterType<EmailValidator>().As<IEmailValidator>();
         builder.RegisterType<PhoneValidator>().As<IPhoneValidator>();
         builder.RegisterType<CustomerInfoValidator>().As<ICustomerInfoValidator>();
+        builder.RegisterType<OrderPlacementValidator>().As<IOrderPlacementValidator>();
     }
 }

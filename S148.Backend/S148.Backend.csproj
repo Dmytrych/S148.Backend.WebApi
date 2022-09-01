@@ -1,5 +1,4 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
-
     <PropertyGroup>
         <TargetFramework>net6.0</TargetFramework>
         <Nullable>disable</Nullable>
@@ -12,6 +11,11 @@
         <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="8.0.0" />
         <PackageReference Include="AutoMapper" Version="11.0.1" />
         <PackageReference Include="AutoMapper.Contrib.Autofac.DependencyInjection" Version="6.1.0" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.8">
+          <PrivateAssets>all</PrivateAssets>
+          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="NovaPoshtaApi" Version="2.1.0" />
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
         <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="6.4.0" />
         <PackageReference Include="Swashbuckle.AspNetCore.Swagger" Version="6.4.0" />
@@ -21,7 +25,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\S148.Backend.Domain\S148.Backend.Domain.csproj" />
-      <ProjectReference Include="..\S148.Backend.NovaPoshta.Service\S148.Backend.NovaPoshta.Service.csproj" />
+      <ProjectReference Include="..\S148.Backend.NovaPoshta.Module\S148.Backend.NovaPoshta.Module.csproj" />
       <ProjectReference Include="..\S148.Backend.Shopping.Module\S148.Backend.Shopping.Module.csproj" />
     </ItemGroup>
 </Project>

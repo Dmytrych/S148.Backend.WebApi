@@ -1,96 +1,41 @@
-﻿using AutoMapper;
-using S148.Backend.Shopping.Extensibility.Models.Service;
-using S148.Backend.Shopping.Extensibility.OrderPlacement;
+﻿using S148.Backend.Shopping.Extensibility.OrderPlacement;
 using S148.Backend.Shopping.Extensibility.OrderPlacement.Models;
-using S148.Backend.Shopping.Extensibility.Repositories;
-using S148.Backend.Shopping.Service.Repositories;
 using S148.Backend.Shopping.Service.Validators;
 
 namespace S148.Backend.Shopping.Service.OrderPlacement;
 
 internal class OrderPlacementService : IOrderPlacementService
 {
-    private readonly ICustomerCrudRepository customerRepository;
-    private readonly IOrderCrudRepository orderRepository;
-    private readonly IOrderDetailsCrudRepository orderDetailsRepository;
-    private readonly ICustomerInfoValidator customerInfoValidator;
-    private readonly IProductRepository productRepository;
     private readonly IOrderPriceCounter orderPriceCounter;
-    private readonly IMapper mapper;
+    private readonly IOrderPlacementValidator orderPlacementValidator;
+    private readonly IOrderCreator orderCreator;
 
     public OrderPlacementService(
-        ICustomerCrudRepository customerRepository,
-        IOrderCrudRepository orderRepository,
-        IOrderDetailsCrudRepository orderDetailsRepository,
-        ICustomerInfoValidator customerInfoValidator,
-        IProductRepository productRepository,
         IOrderPriceCounter orderPriceCounter,
-        IMapper mapper)
+        IOrderPlacementValidator orderPlacementValidator,
+        IOrderCreator orderCreator)
     {
-        this.customerRepository = customerRepository;
-        this.orderRepository = orderRepository;
-        this.orderDetailsRepository = orderDetailsRepository;
-        this.customerInfoValidator = customerInfoValidator;
-        this.productRepository = productRepository;
         this.orderPriceCounter = orderPriceCounter;
-        this.mapper = mapper;
+        this.orderPlacementValidator = orderPlacementValidator;
+        this.orderCreator = orderCreator;
     }
 
-    public OrderPlacementResponse Create(CustomerInfoDto customerInfo, IReadOnlyCollection<ProductOrderingInfo> products)
+    public OrderPlacementResponse Create(CustomerInfoDto customerInfo, IReadOnlyCollection<ProductOrderingInfo> products, string cityId, int warehouseNumber)
     {
-        if (!products.Any())
+        var validationResult = orderPlacementValidator.Validate(customerInfo, products, cityId, warehouseNumber);
+
+        if (!validationResult.IsValid)
         {
-            throw new ArgumentException();
+            throw new ArgumentException("Invalid input data");
         }
 
-        var customerValidationResult = customerInfoValidator.Validate(customerInfo);
+        var creationResult = orderCreator.Create(customerInfo, products, cityId, warehouseNumber);
 
-        if (!customerValidationResult.IsValid)
-        {
-            throw new ArgumentException();
-        }
-
-        var allProductIds = productRepository.GetAll();
-        if (!products.All(product => allProductIds.Contains(product.ProductId)))
-        {
-            throw new ArgumentException();
-        }
-
-        if (products.DistinctBy(p => p.ProductId).Count() != products.Count)
-        {
-            throw new ArgumentException();
-        }
-
-        var customer = mapper.Map<CustomerInfoDto, CustomerServiceModel>(customerInfo);
-
-        var customerModel = customerRepository.Create(customer);
-
-        var order = new OrderServiceModel
-        {
-            CustomerId = customerModel.Id
-        };
-        var orderModel = orderRepository.Create(order);
-
-        var createdOrderDetails = new List<OrderDetailsServiceModel>();
-        foreach (var product in products)
-        {
-            var orderDetails = new OrderDetailsServiceModel
-            {
-                OrderId = orderModel.Id,
-                ProductId = product.ProductId,
-                Quantity = product.Quantity,
-                UnitPrice = productRepository.GetPrice(product.ProductId) ??
-                            throw new ArgumentException("Product was not found")
-            };
-
-            createdOrderDetails.Add(orderDetailsRepository.Create(orderDetails));
-        }
-
-        var totalPrice = orderPriceCounter.GetTotalPrice(createdOrderDetails);
+        var totalPrice = orderPriceCounter.GetTotalPrice(creationResult.Result.orderDetails);
 
         return new OrderPlacementResponse
         {
-            OrderId = orderModel.Id,
+            OrderId = creationResult.Result.orderId,
             TotalPrice = totalPrice
         };
     }

@@ -1,10 +1,14 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using S148.Backend.Domain.Dto;
 
 namespace S148.Backend.Domain;
 
 public class DatabaseContext : DbContext, IDatabaseContext
 {
+    private const string DbConnectionStringToken = "PgSqlConnectionString";
+    private readonly string connectionString;
+    
     public DbSet<Order> Orders { get; set; }
 
     public DbSet<Customer> Customers { get; set; }
@@ -12,11 +16,17 @@ public class DatabaseContext : DbContext, IDatabaseContext
     public DbSet<Product> Products { get; set; }
 
     public DbSet<OrderDetails> OrderDetails { get; set; }
+    
+    public DbSet<DeliveryInfo> DeliveryInfo { get; set; }
 
+    public DatabaseContext(IConfiguration configuration)
+    {
+        this.connectionString = configuration[DbConnectionStringToken];
+    }
+    
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        optionsBuilder.UseNpgsql(
-            @"User ID=postgres;Password=karambol;Host=localhost;Port=5433;Database=S148_Server;");
+        optionsBuilder.UseNpgsql(connectionString);
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

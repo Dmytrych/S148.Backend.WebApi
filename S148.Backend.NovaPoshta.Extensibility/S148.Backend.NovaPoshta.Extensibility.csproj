@@ -6,4 +6,12 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
+    <ItemGroup>
+      <PackageReference Include="NovaPoshtaApi" Version="2.1.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\S148.Backend.Extensibility\S148.Backend.Extensibility.csproj" />
+    </ItemGroup>
+
 </Project>

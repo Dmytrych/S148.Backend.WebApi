@@ -17,5 +17,10 @@ public class Order
     [ForeignKey("Customer")]
     public int CustomerId { get; set; }
 
+    public DeliveryInfo DeliveryInfo { get; set; }
+    
+    [ForeignKey("DeliveryInfo")]
+    public int DeliveryInfoId { get; set; }
+
     public ICollection<OrderDetails> OrderDetails { get; set; }
 }

@@ -6,4 +6,14 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
+    <ItemGroup>
+        <PackageReference Include="Autofac" Version="6.4.0" />
+        <PackageReference Include="NovaPoshtaApi" Version="2.1.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\S148.Backend.Extensibility\S148.Backend.Extensibility.csproj" />
+        <ProjectReference Include="..\S148.Backend.NovaPoshta.Extensibility\S148.Backend.NovaPoshta.Extensibility.csproj" />
+    </ItemGroup>
+
 </Project>

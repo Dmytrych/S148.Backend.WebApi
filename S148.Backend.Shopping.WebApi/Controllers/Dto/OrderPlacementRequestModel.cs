@@ -7,4 +7,8 @@ public class OrderPlacementRequestModel
     public CustomerInfoDto CustomerInfo { get; set; }
 
     public IReadOnlyCollection<ProductOrderingInfo> Products { get; set; }
+    
+    public int WarehouseNumber { get; set; }
+    
+    public string CityId { get; set; }
 }

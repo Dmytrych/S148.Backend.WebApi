@@ -9,9 +9,10 @@
     <ItemGroup>
         <PackageReference Include="Autofac" Version="6.4.0" />
         <PackageReference Include="AutoMapper" Version="11.0.1" />
+        <PackageReference Include="NovaPoshtaApi" Version="2.1.0" />
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\S148.Backend.NovaPoshta.Extensibility\S148.Backend.NovaPoshta.Extensibility.csproj" />
+        <ProjectReference Include="..\S148.Backend.NovaPoshta.Extensibility\S148.Backend.NovaPoshta.Extensibility.csproj" />
     </ItemGroup>
 </Project>

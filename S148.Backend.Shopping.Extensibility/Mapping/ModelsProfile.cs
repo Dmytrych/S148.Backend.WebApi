@@ -12,5 +12,6 @@ public class ModelsProfile : Profile
         CreateMap<OrderServiceModel, Order>().ReverseMap();
         CreateMap<OrderDetailsServiceModel, OrderDetails>().ReverseMap();
         CreateMap<ProductServiceModel, Product>().ReverseMap();
+        CreateMap<DeliveryInfoServiceModel, DeliveryInfo>().ReverseMap();
     }
 }

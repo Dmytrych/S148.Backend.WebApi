@@ -13,6 +13,8 @@ public interface IDatabaseContext
     DbSet<Product> Products { get; set; }
 
     DbSet<OrderDetails> OrderDetails { get; set; }
+    
+    DbSet<DeliveryInfo> DeliveryInfo { get; set; }
 
     DatabaseFacade Database { get; }
 
