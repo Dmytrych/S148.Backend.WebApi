@@ -16,6 +16,7 @@ namespace S148.Backend.Shopping.WebApi.Controllers
         }
 
         [HttpPost]
+        [Route("[action]")]
         [SwaggerOperation("Test","Test test")]
         public IActionResult Test()
         {

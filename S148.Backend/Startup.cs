@@ -13,6 +13,7 @@ namespace S148.Backend
     public class Startup
     {
       private const string NovaPoshtaApiKeyToken = "NovaPoshtaApiKey";
+      private const string FrontendAppUrlToken = "FrontendAppUrl";
 
       public Startup(IConfiguration configuration)
       {
@@ -33,6 +34,17 @@ namespace S148.Backend
         {
           c.SwaggerDoc("v1", new OpenApiInfo { Title = "webApiGitTest", Version = "v1" });
           c.EnableAnnotations();
+        });
+        services.AddCors(options =>
+        {
+          options.AddDefaultPolicy(
+            builder =>
+            {
+              builder
+                .WithOrigins(Configuration[FrontendAppUrlToken])
+                .AllowAnyHeader()
+                .AllowAnyMethod();
+            });
         });
       }
 
@@ -61,6 +73,7 @@ namespace S148.Backend
           app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "webApiGitTest v1"));
         }
         
+        app.UseCors();
         app.UseExceptionHandler("/Error");
         app.UseHsts();
 
