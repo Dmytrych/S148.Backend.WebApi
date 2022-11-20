@@ -28,7 +28,7 @@ public abstract class CrudRepositoryBase<TServiceModel, TEntity, TFilter> : ICru
 
     public abstract TServiceModel Update(TServiceModel model);
 
-    public abstract IReadOnlyCollection<TServiceModel> GetAll(TFilter model);
+    public abstract IReadOnlyCollection<TServiceModel> GetAll(TFilter filterModel);
 
     protected virtual TEntity Convert(TServiceModel serviceModel)
         => mapper.Map<TServiceModel, TEntity>(serviceModel);

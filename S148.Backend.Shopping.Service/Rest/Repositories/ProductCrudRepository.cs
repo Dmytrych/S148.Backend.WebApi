@@ -22,16 +22,16 @@ public class ProductCrudRepository : CrudRepositoryBase<ProductServiceModel, Pro
         throw new NotImplementedException();
     }
 
-    public override IReadOnlyCollection<ProductServiceModel> GetAll(ProductFilter model)
+    public override IReadOnlyCollection<ProductServiceModel> GetAll(ProductFilter filterModel)
     {
         IQueryable<Product> products = databaseContext.Products;
-        
-        if (model.IdFilter != null)
+
+        if (filterModel is { IdFilter: { } })
         {
-            products = products.Where(details => model.IdFilter.Filter.Any(filter => filter == details.Id));
+            products = products.Where(details => filterModel.IdFilter.Filter.Any(filter => filter == details.Id));
         }
 
-        return products.Select(p => Convert(p)).ToList();
+        return products.ToList().Select(p => Convert(p)).ToList();
     }
 
     public ProductServiceModel? Get(int identifier)

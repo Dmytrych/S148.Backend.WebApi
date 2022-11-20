@@ -29,8 +29,6 @@ public abstract class CrudServiceBase<TServiceModel, TFilter> : ICrudService<TSe
 
     public abstract TServiceModel Get(int id);
 
-    public IReadOnlyCollection<TServiceModel> GetAll(TFilter model)
-    {
-        throw new NotImplementedException();
-    }
+    public virtual IReadOnlyCollection<TServiceModel> GetAll(TFilter filter)
+        => crudRepository.GetAll(filter);
 }

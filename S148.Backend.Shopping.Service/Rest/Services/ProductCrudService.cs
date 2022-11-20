@@ -17,7 +17,8 @@ public class ProductCrudService : CrudServiceBase<ProductServiceModel, ProductFi
     }
 
     public override ProductServiceModel Get(int id)
-    {
-        return crudRepository.Get(id);
-    }
+        => crudRepository.Get(id);
+
+    public override IReadOnlyCollection<ProductServiceModel> GetAll(ProductFilter filter)
+        => crudRepository.GetAll(filter);
 }

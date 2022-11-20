@@ -21,19 +21,19 @@ public class OrderDetailsCrudRepository : CrudRepositoryBase<OrderDetailsService
         throw new NotImplementedException();
     }
 
-    public override IReadOnlyCollection<OrderDetailsServiceModel> GetAll(OrderDetailsFilter model)
+    public override IReadOnlyCollection<OrderDetailsServiceModel> GetAll(OrderDetailsFilter filterModel)
     {
         IQueryable<OrderDetails> orderDetails = databaseContext.OrderDetails;
         
-        if (model.OrderFilter != null)
+        if (filterModel.OrderFilter != null)
         {
-            orderDetails = orderDetails.Where(details => model.OrderFilter.Filter.Any(filter => filter == details.OrderId));
+            orderDetails = orderDetails.Where(details => filterModel.OrderFilter.Filter.Any(filter => filter == details.OrderId));
         }
 
-        if (model.ProductFilter != null)
+        if (filterModel.ProductFilter != null)
         {
             orderDetails = orderDetails.Where(details =>
-                model.ProductFilter.Filter.Any(filter => filter == details.ProductId));
+                filterModel.ProductFilter.Filter.Any(filter => filter == details.ProductId));
         }
 
         return orderDetails.Select(od => Convert(od)).ToList();

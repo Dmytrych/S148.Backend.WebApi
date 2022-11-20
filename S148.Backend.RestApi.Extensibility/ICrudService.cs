@@ -12,5 +12,5 @@ public interface ICrudService<TServiceModel, in TFilter>
 
     TServiceModel Get(int id);
 
-    IReadOnlyCollection<TServiceModel> GetAll(TFilter model);
+    IReadOnlyCollection<TServiceModel> GetAll(TFilter filter);
 }

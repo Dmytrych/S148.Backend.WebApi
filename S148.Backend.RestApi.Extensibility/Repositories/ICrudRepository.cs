@@ -6,5 +6,5 @@ public interface ICrudRepository<TServiceModel, in TFilter>
 
     TServiceModel Update(TServiceModel model);
 
-    IReadOnlyCollection<TServiceModel> GetAll(TFilter model);
+    IReadOnlyCollection<TServiceModel> GetAll(TFilter filterModel);
 }

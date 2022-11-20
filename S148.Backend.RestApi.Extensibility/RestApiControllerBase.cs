@@ -62,7 +62,6 @@ public abstract class RestApiControllerBase<TRestModel, TRestCreateModel, TServi
     [SwaggerOperation("Get model")]
     [SwaggerResponse(200, "Model found")]
     [SwaggerResponse(400, "Invalid data provided")]
-    
     public IActionResult Get(int id)
     {
         var result = crudService.Get(id);
@@ -76,12 +75,19 @@ public abstract class RestApiControllerBase<TRestModel, TRestCreateModel, TServi
     
     [HttpGet]
     [Route("[action]")]
-    [SwaggerOperation("Create model")]
+    [SwaggerOperation("Get all models")]
     [SwaggerResponse(200, "Models found")]
     [SwaggerResponse(400, "Invalid data provided")]
-    public IActionResult GetAll(TFilter filter)
+    public IActionResult GetAll([FromQuery]TFilter filter)
     {
-        throw new NotImplementedException();
+        var result = crudService.GetAll(filter);
+        
+        if (result == null)
+        {
+            return BadRequest();
+        }
+
+        return Ok(result);
     }
 
     protected virtual TRestModel Convert(TServiceModel serviceModel)

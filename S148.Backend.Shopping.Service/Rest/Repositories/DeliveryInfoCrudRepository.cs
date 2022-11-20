@@ -20,7 +20,7 @@ public class DeliveryInfoCrudRepository : CrudRepositoryBase<DeliveryInfoService
         throw new NotImplementedException();
     }
 
-    public override IReadOnlyCollection<DeliveryInfoServiceModel> GetAll(DeliveryInfoFilter model)
+    public override IReadOnlyCollection<DeliveryInfoServiceModel> GetAll(DeliveryInfoFilter filterModel)
     {
         throw new NotImplementedException();
     }

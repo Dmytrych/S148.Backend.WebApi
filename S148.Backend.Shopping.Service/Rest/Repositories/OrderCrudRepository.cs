@@ -20,13 +20,13 @@ public class OrderCrudRepository : CrudRepositoryBase<OrderServiceModel, Order, 
         throw new NotImplementedException();
     }
 
-    public override IReadOnlyCollection<OrderServiceModel> GetAll(OrderFilter model)
+    public override IReadOnlyCollection<OrderServiceModel> GetAll(OrderFilter filterModel)
     {
         IQueryable<Order> orders = databaseContext.Orders;
         
-        if (model.Id.Any())
+        if (filterModel.Id.Any())
         {
-            orders = orders.Where(c => model.Id.Any(id => id == c.Id));
+            orders = orders.Where(c => filterModel.Id.Any(id => id == c.Id));
         }
 
         return orders.Select(c => Convert(c)).ToList();
