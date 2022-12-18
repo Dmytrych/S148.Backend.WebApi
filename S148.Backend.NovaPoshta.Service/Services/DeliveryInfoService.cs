@@ -20,7 +20,7 @@ public class DeliveryInfoService : IDeliveryInfoService
         {
             return new List<City>();
         }
-        
+
         return (await infoRepository.GetCitiesByName(nameFilter)).ToList();
     }
 

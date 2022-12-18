@@ -34,32 +34,42 @@ public class DeliveryInfoApiController : ControllerBase
         }
         catch
         {
-            return null;
+            return new List<CityClientDto>();
         }
     }
     
     [HttpGet]
     [Route("[action]")]
-    public async Task<IActionResult> GetWarehouses(string cityId, string cityName, int limit = 20)
+    public async Task<IReadOnlyCollection<WarehouseClientDto>> GetWarehouses(string cityId, string cityName, int limit = 20)
     {
-        return Ok(await deliveryInfoService.GetWarehousesAsync(cityId, cityName, limit));
+        var warehouses = await deliveryInfoService.GetWarehousesAsync(cityId, cityName, limit);
+
+        return warehouses.Select(Convert).ToList();
     }
 
     private async Task<CityClientDto> Convert(City city)
     {
         var area = await deliveryInfoService.GetArea(city.Area);
 
-        var name = string.Concat(city.SettlementTypeDescription, " ", city.Description);
+        var fullName = string.Concat(city.SettlementTypeDescription, " ", city.Description);
 
         if (area.IsValid)
         {
-            name = string.Concat(name, ", ", area.Result.Description, " ", AreaString, " ");
+            fullName = string.Concat(fullName, ", ", area.Result.Description, " ", AreaString, " ");
         }
 
         return new CityClientDto
         {
             CityGuidRef = city.Ref,
-            Description = name
+            Description = fullName,
+            Name = city.Description
         };
     }
+    
+    private WarehouseClientDto Convert(Warehouse warehouse)
+        => new()
+        {
+            Name = warehouse.Description,
+            WarehouseGuidRef = warehouse.Ref
+        };
 }
