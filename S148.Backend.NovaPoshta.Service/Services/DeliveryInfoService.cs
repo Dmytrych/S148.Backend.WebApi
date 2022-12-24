@@ -24,8 +24,8 @@ public class DeliveryInfoService : IDeliveryInfoService
         return (await infoRepository.GetCitiesByName(nameFilter)).ToList();
     }
 
-    public async Task<IReadOnlyCollection<Warehouse>> GetWarehousesAsync(string cityId, string cityName, int limit)
-        => (await infoRepository.GetWarehouses(cityId, cityName, limit)).ToList();
+    public async Task<OperationResult<Warehouse>> GetWarehouseByNumberAsync(string cityId, string cityName, int warehouseId)
+        => await infoRepository.GetWarehouseByNumberAsync(cityId, cityName, warehouseId);
 
     public async Task<OperationResult<Area>> GetArea(string areaGuidRef)
         => await infoRepository.GetAreaByIdAsync(areaGuidRef);

@@ -14,9 +14,9 @@ public class WarehouseParameterCreator : IParameterCreator<LimitedWarehouseParam
             parameters.Page = filter.Page;
         }
 
-        if (!filter.WarehouseId.IsNullOrEmpty())
+        if (filter.WarehouseId != null)
         {
-            parameters.WarehouseId = filter.WarehouseId;
+            parameters.WarehouseId = filter.WarehouseId.Value.ToString();
         }
 
         if (!filter.CityId.IsNullOrEmpty())

@@ -27,20 +27,41 @@ public class NovaPoshtaInfoRepository : INovaPoshtaInfoRepository
             Page = 1
         })).ToList();
 
-    public async Task<OperationResult<Warehouse>> GetWarehouseByNumberAsync(string cityId, string cityName, int warehouseNumber)
+    public async Task<OperationResult<Warehouse>> GetWarehousesByNumberFilterAsync(string cityId, string cityName, int warehouseNumber)
     {
         var warehouses = (await novaPoshtaClient.Address.GetWarehouses(new WarehouseFilter
         {
-            WarehouseId = warehouseNumber.ToString(),
+            WarehouseId = warehouseNumber,
             CityId = cityId,
             Limit = 1,
             Page = 1,
             CityName = cityName
         })).ToList();
 
-        if (warehouses.Any())
+        var foundWarehouse = warehouses.FirstOrDefault(warehouse => warehouse.Number == warehouseNumber.ToString());
+        if (warehouses.Any() && foundWarehouse != null)
         {
-            return new OperationResult<Warehouse>(warehouses.First());
+            return new OperationResult<Warehouse>(foundWarehouse);
+        }
+
+        return new OperationResult<Warehouse>(new List<string>());
+    }
+    
+    public async Task<OperationResult<Warehouse>> GetWarehouseByNumberAsync(string cityId, string cityName, int warehouseNumber)
+    {
+        var warehouses = (await novaPoshtaClient.Address.GetWarehouses(new WarehouseFilter
+        {
+            WarehouseId = warehouseNumber,
+            CityId = cityId,
+            Limit = 100,
+            Page = 1,
+            CityName = cityName
+        })).ToList();
+
+        var foundWarehouse = warehouses.FirstOrDefault(warehouse => warehouse.Number == warehouseNumber.ToString());
+        if (warehouses.Any() && foundWarehouse != null)
+        {
+            return new OperationResult<Warehouse>(foundWarehouse);
         }
 
         return new OperationResult<Warehouse>(new List<string>());

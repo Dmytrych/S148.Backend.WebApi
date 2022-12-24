@@ -2,7 +2,7 @@
 
 public class WarehouseFilter
 {
-    public string WarehouseId { get; set; }
+    public int? WarehouseId { get; set; }
     
     public string CityName { get; set; }
     

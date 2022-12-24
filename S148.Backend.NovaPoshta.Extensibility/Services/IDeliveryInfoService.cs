@@ -7,7 +7,7 @@ public interface IDeliveryInfoService
 {
     Task<IReadOnlyCollection<City>> GetCitiesAsync(string nameFilter);
 
-    Task<IReadOnlyCollection<Warehouse>> GetWarehousesAsync(string cityId, string cityName, int limit);
+    Task<OperationResult<Warehouse>> GetWarehouseByNumberAsync(string cityId, string cityName, int warehouseId);
 
     Task<OperationResult<Area>> GetArea(string areaGuidRef);
 }

@@ -40,11 +40,16 @@ public class DeliveryInfoApiController : ControllerBase
     
     [HttpGet]
     [Route("[action]")]
-    public async Task<IReadOnlyCollection<WarehouseClientDto>> GetWarehouses(string cityId, string cityName, int limit = 20)
+    public async Task<IActionResult> GetWarehouseByNumber(
+        [FromQuery]string cityGuidRef,
+        [FromQuery]string cityName,
+        [FromQuery]int warehouseNumber)
     {
-        var warehouses = await deliveryInfoService.GetWarehousesAsync(cityId, cityName, limit);
+        var warehouse = await deliveryInfoService.GetWarehouseByNumberAsync(cityGuidRef, cityName, warehouseNumber);
 
-        return warehouses.Select(Convert).ToList();
+        return warehouse.IsValid
+            ? Ok(Convert(warehouse.Result))
+            : NotFound();
     }
 
     private async Task<CityClientDto> Convert(City city)
