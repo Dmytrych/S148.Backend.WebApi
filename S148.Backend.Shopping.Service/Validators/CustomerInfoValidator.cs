@@ -1,4 +1,5 @@
 ﻿using S148.Backend.Extensibility;
+using S148.Backend.Shopping.Extensibility.Models.Service;
 using S148.Backend.Shopping.Extensibility.OrderPlacement.Models;
 
 namespace S148.Backend.Shopping.Service.Validators;
@@ -14,8 +15,13 @@ internal class CustomerInfoValidator : ICustomerInfoValidator
         this.phoneValidator = phoneValidator;
     }
 
-    public OperationResult Validate(CustomerInfoDto customerInfo)
+    public OperationResult Validate(CustomerServiceModel customerInfo)
     {
+        if (customerInfo == null)
+        {
+            throw new ArgumentException();
+        }
+        
         if (!emailValidator.Validate(customerInfo.Email))
         {
             throw new ArgumentException();

@@ -16,6 +16,8 @@ public interface IDatabaseContext
     
     DbSet<DeliveryInfo> DeliveryInfo { get; set; }
 
+    DbSet<NovaPoshtaDeliveryInfo> NovaPoshtaDeliveryInfo { get; set; }
+
     DatabaseFacade Database { get; }
 
     int SaveChanges();

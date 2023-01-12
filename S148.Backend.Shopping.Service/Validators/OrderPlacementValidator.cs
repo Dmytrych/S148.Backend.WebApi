@@ -1,6 +1,5 @@
 ﻿using S148.Backend.Extensibility;
-using S148.Backend.Extensibility.StringUtils;
-using S148.Backend.Shopping.Extensibility.OrderPlacement.Models;
+using S148.Backend.Shopping.Service.OrderPlacement.Dto;
 using S148.Backend.Shopping.Service.Repositories;
 
 namespace S148.Backend.Shopping.Service.Validators;
@@ -16,14 +15,14 @@ public class OrderPlacementValidator : IOrderPlacementValidator
         this.productRepository = productRepository;
     }
     
-    public OperationResult Validate(CustomerInfoDto customerInfo, IReadOnlyCollection<ProductOrderingInfo> products, string cityId, int warehouseNumber)
+    public OperationResult Validate(NovaPoshtaOrderData novaPoshtaOrderData)
     {
-        if (!products.Any() || cityId.IsNullOrEmpty() || warehouseNumber <= 0)
+        if (!novaPoshtaOrderData.Products.Any() || novaPoshtaOrderData.CityGuidRef == null || novaPoshtaOrderData.WarehouseNumber <= 0)
         {
             throw new ArgumentException();
         }
 
-        var customerValidationResult = customerInfoValidator.Validate(customerInfo);
+        var customerValidationResult = customerInfoValidator.Validate(novaPoshtaOrderData.CustomerModel);
 
         if (!customerValidationResult.IsValid)
         {
@@ -31,12 +30,12 @@ public class OrderPlacementValidator : IOrderPlacementValidator
         }
 
         var allProductIds = productRepository.GetAll();
-        if (!products.All(product => allProductIds.Contains(product.ProductId)))
+        if (!novaPoshtaOrderData.Products.All(product => allProductIds.Contains(product.ProductId)))
         {
             throw new ArgumentException();
         }
 
-        if (products.DistinctBy(p => p.ProductId).Count() != products.Count)
+        if (novaPoshtaOrderData.Products.DistinctBy(p => p.ProductId).Count() != novaPoshtaOrderData.Products.Count)
         {
             throw new ArgumentException();
         }

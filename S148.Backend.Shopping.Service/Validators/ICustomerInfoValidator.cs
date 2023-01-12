@@ -1,9 +1,8 @@
 ﻿using S148.Backend.Extensibility;
-using S148.Backend.Shopping.Extensibility.OrderPlacement.Models;
-
+using S148.Backend.Shopping.Extensibility.Models.Service;
 namespace S148.Backend.Shopping.Service.Validators;
 
 public interface ICustomerInfoValidator
 {
-    OperationResult Validate(CustomerInfoDto customerInfo);
+    OperationResult Validate(CustomerServiceModel customerInfo);
 }

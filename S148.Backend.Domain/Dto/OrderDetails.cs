@@ -19,4 +19,6 @@ public class OrderDetails
     public int Quantity { get; set; }
 
     public float? Discount { get; set; }
+    
+    public string Description { get; set; }
 }

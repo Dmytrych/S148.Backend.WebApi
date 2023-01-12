@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using S148.Backend.Shopping.Extensibility.OrderPlacement;
-using S148.Backend.Shopping.WebApi.Controllers.Dto;
+using S148.Backend.Shopping.Extensibility.OrderPlacement.Models;
 
 namespace S148.Backend.Shopping.WebApi.Controllers;
 
@@ -8,21 +7,19 @@ namespace S148.Backend.Shopping.WebApi.Controllers;
 [Route("[controller]")]
 public class OrderPlacementApiController : ControllerBase
 {
-    private readonly IOrderPlacementService orderPlacementService;
-
-    public OrderPlacementApiController(IOrderPlacementService orderPlacementService)
-    {
-        this.orderPlacementService = orderPlacementService;
-    }
+    private const string NovaPoshtaDeliveryActionName = "novaPoshta";
 
     [HttpPost]
-    [Route("[action]")]
-    public IActionResult Create(OrderPlacementRequestModel requestModel)
+    [Route("{NovaPoshtaDeliveryActionName}/[action]")]
+    public IActionResult Create(
+        CustomerInfoDto customerInfo,
+        IReadOnlyCollection<ProductOrderingInfo> products,
+        Guid cityGuidRef,
+        string postIndex)
     {
         try
         {
-            var result = orderPlacementService.Create(requestModel.CustomerInfo, requestModel.Products, requestModel.CityId, requestModel.WarehouseNumber);
-            return Ok(result);
+            return Ok();
         }
         catch
         {

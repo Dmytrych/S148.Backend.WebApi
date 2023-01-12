@@ -9,12 +9,8 @@ public class DeliveryInfoServiceModel
     public string CityType { get; set; }
     
     public string CityRef { get; set; }
-    
-    public string AreaName { get; set; }
-    
-    public string AreaRef { get; set; }
-    
-    public string WarehouseNumber { get; set; }
-    
-    public string WarehouseDescription { get; set; }
+
+    public int NovaPoshtaDeliveryInfo { get; set; }
+
+    public int UkrposhtaDeliveryInfo { get; set; }
 }

@@ -19,9 +19,11 @@ public class DatabaseContext : DbContext, IDatabaseContext
     
     public DbSet<DeliveryInfo> DeliveryInfo { get; set; }
 
+    public DbSet<NovaPoshtaDeliveryInfo> NovaPoshtaDeliveryInfo { get; set; }
+
     public DatabaseContext(IConfiguration configuration)
     {
-        this.connectionString = configuration[DbConnectionStringToken];
+        connectionString = configuration[DbConnectionStringToken];
     }
     
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

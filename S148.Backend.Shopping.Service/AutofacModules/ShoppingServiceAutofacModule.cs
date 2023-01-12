@@ -3,10 +3,10 @@ using AutoMapper;
 using S148.Backend.RestApi.Extensibility;
 using S148.Backend.Shopping.Extensibility.Models.Filters;
 using S148.Backend.Shopping.Extensibility.Models.Service;
-using S148.Backend.Shopping.Extensibility.OrderPlacement;
 using S148.Backend.Shopping.Extensibility.Repositories;
 using S148.Backend.Shopping.Service.MappingProfiles;
 using S148.Backend.Shopping.Service.OrderPlacement;
+using S148.Backend.Shopping.Service.OrderPlacement.Dto;
 using S148.Backend.Shopping.Service.Repositories;
 using S148.Backend.Shopping.Service.Rest.Repositories;
 using S148.Backend.Shopping.Service.Rest.Services;
@@ -20,17 +20,22 @@ public class ShoppingServiceAutofacModule : Module
     {
         builder.RegisterType<ProductMappingProfile>().As<Profile>();
         builder.RegisterType<ProductCrudService>().As<ICrudService<ProductServiceModel, ProductFilter>>();
-        builder.RegisterType<OrderCreator>().As<IOrderCreator>();
 
         BindRepositories(builder);
         BindValidators(builder);
         BindCounters(builder);
         BindServices(builder);
+        BindFactories(builder);
+    }
+
+    private void BindFactories(ContainerBuilder builder)
+    {
+        builder.RegisterType<NovaPoshtaDeliveryInfoFactory>().As<INovaPoshtaDeliveryInfoFactory>();
     }
 
     private void BindServices(ContainerBuilder builder)
     {
-        builder.RegisterType<OrderPlacementService>().As<IOrderPlacementService>();
+        builder.RegisterType<NovaPoshtaOrderPlacementService>().As<IOrderPlacementService<NovaPoshtaOrderData>>();
     }
 
     private void BindCounters(ContainerBuilder builder)
@@ -45,6 +50,7 @@ public class ShoppingServiceAutofacModule : Module
         builder.RegisterType<CustomerCrudRepository>().As<ICustomerCrudRepository>();
         builder.RegisterType<OrderDetailsCrudRepository>().As<IOrderDetailsCrudRepository>();
         builder.RegisterType<DeliveryInfoCrudRepository>().As<IDeliveryInfoCrudRepository>();
+        builder.RegisterType<NovaPoshtaDeliveryInfoCrudRepository>().As<INovaPoshtaDeliveryInfoCrudRepository>();
 
         builder.RegisterType<ProductRepository>().As<IProductRepository>();
     }
@@ -55,5 +61,6 @@ public class ShoppingServiceAutofacModule : Module
         builder.RegisterType<PhoneValidator>().As<IPhoneValidator>();
         builder.RegisterType<CustomerInfoValidator>().As<ICustomerInfoValidator>();
         builder.RegisterType<OrderPlacementValidator>().As<IOrderPlacementValidator>();
+        builder.RegisterType<OrderContentValidator>().As<IOrderContentValidator>();
     }
 }
