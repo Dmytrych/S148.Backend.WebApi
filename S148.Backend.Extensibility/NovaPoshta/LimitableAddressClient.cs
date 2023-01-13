@@ -1,5 +1,6 @@
 ﻿using NovaPoshtaApi;
 using S148.Backend.Extensibility.NovaPoshta.Models;
+using S148.Backend.Extensibility.NovaPoshta.OnlineSettlementSearch;
 using S148.Backend.Extensibility.NovaPoshta.ParameterCreators;
 
 namespace S148.Backend.Extensibility.NovaPoshta;
@@ -8,16 +9,20 @@ public class LimitableAddressClient : ApiClient, ILimitableAddressClient
 {
     private readonly IParameterCreator<LimitedWarehouseParameters, WarehouseFilter> warehouseParameterCreator;
     private readonly IParameterCreator<LimitedCityParameters, CityFilter> cityParameterCreator;
-    
+
     public LimitableAddressClient(
         IApiConnection connection,
         IParameterCreator<LimitedWarehouseParameters, WarehouseFilter> warehouseParameterCreator,
-        IParameterCreator<LimitedCityParameters, CityFilter> cityParameterCreator)
+        IParameterCreator<LimitedCityParameters, CityFilter> cityParameterCreator,
+        IQuickCitySearchClient quickCitySearchClient)
         : base(connection)
     {
         this.warehouseParameterCreator = warehouseParameterCreator;
         this.cityParameterCreator = cityParameterCreator;
+        QuickCitySearchClient = quickCitySearchClient;
     }
+    
+    public IQuickCitySearchClient QuickCitySearchClient { get; }
 
     //This method was left only because the original library interface has it
     [Obsolete("Do not use this method. It loads a giant amount of data from an external API and always fails with timeout")]

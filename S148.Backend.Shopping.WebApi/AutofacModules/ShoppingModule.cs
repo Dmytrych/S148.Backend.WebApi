@@ -7,6 +7,5 @@ public class ShoppingModule : Module
 {
     protected override void Load(ContainerBuilder builder)
     {
-        builder.Register(c => new TestClass()).As<ITestClass>();
     }
 }
