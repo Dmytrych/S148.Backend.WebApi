@@ -2,6 +2,9 @@
 using S148.Backend.Extensibility.NovaPoshta.Models;
 using S148.Backend.Extensibility.NovaPoshta.OnlineSettlementSearch;
 using S148.Backend.Extensibility.NovaPoshta.ParameterCreators;
+using Area = S148.Backend.Extensibility.NovaPoshta.Models.Area;
+using City = S148.Backend.Extensibility.NovaPoshta.Models.City;
+using Warehouse = S148.Backend.Extensibility.NovaPoshta.Models.Warehouse;
 
 namespace S148.Backend.Extensibility.NovaPoshta;
 

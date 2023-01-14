@@ -1,4 +1,6 @@
-﻿namespace S148.Backend.Domain.Dto;
+﻿using System;
+
+namespace S148.Backend.Domain.Dto;
 
 public class NovaPoshtaDeliveryInfo
 {
@@ -8,11 +10,11 @@ public class NovaPoshtaDeliveryInfo
     
     public string CityType { get; set; }
     
-    public string CityRef { get; set; }
+    public Guid CityRef { get; set; }
 
     public string AreaName { get; set; }
     
-    public string AreaRef { get; set; }
+    public Guid AreaRef { get; set; }
     
     public int WarehouseNumber { get; set; }
     

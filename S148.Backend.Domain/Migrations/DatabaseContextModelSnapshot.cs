@@ -63,21 +63,38 @@ namespace S148.Backend.Domain.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("NovaPoshtaDeliveryInfo")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("NovaPoshtaDeliveryInfoId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("DeliveryInfo");
+                });
+
+            modelBuilder.Entity("S148.Backend.Domain.Dto.NovaPoshtaDeliveryInfo", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
                     b.Property<string>("AreaName")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("AreaRef")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<Guid>("AreaRef")
+                        .HasColumnType("uuid");
 
                     b.Property<string>("CityName")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("CityRef")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<Guid>("CityRef")
+                        .HasColumnType("uuid");
 
                     b.Property<string>("CityType")
                         .IsRequired()
@@ -87,13 +104,12 @@ namespace S148.Backend.Domain.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("WarehouseNumber")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<int>("WarehouseNumber")
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
-                    b.ToTable("DeliveryInfo");
+                    b.ToTable("NovaPoshtaDeliveryInfo");
                 });
 
             modelBuilder.Entity("S148.Backend.Domain.Dto.Order", b =>
@@ -126,6 +142,9 @@ namespace S148.Backend.Domain.Migrations
 
                     b.Property<int>("ProductId")
                         .HasColumnType("integer");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("text");
 
                     b.Property<float?>("Discount")
                         .HasColumnType("real");

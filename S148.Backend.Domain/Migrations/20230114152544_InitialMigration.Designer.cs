@@ -12,14 +12,14 @@ using S148.Backend.Domain;
 namespace S148.Backend.Domain.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20220823134213_ChangedMoneyType")]
-    partial class ChangedMoneyType
+    [Migration("20230114152544_InitialMigration")]
+    partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.7")
+                .HasAnnotation("ProductVersion", "6.0.8")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -57,6 +57,63 @@ namespace S148.Backend.Domain.Migrations
                     b.ToTable("Customers");
                 });
 
+            modelBuilder.Entity("S148.Backend.Domain.Dto.DeliveryInfo", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("NovaPoshtaDeliveryInfo")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("NovaPoshtaDeliveryInfoId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("DeliveryInfo");
+                });
+
+            modelBuilder.Entity("S148.Backend.Domain.Dto.NovaPoshtaDeliveryInfo", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("AreaName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<Guid>("AreaRef")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("CityName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<Guid>("CityRef")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("CityType")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("WarehouseDescription")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("WarehouseNumber")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("NovaPoshtaDeliveryInfo");
+                });
+
             modelBuilder.Entity("S148.Backend.Domain.Dto.Order", b =>
                 {
                     b.Property<int>("Id")
@@ -68,9 +125,14 @@ namespace S148.Backend.Domain.Migrations
                     b.Property<int>("CustomerId")
                         .HasColumnType("integer");
 
+                    b.Property<int>("DeliveryInfoId")
+                        .HasColumnType("integer");
+
                     b.HasKey("Id");
 
                     b.HasIndex("CustomerId");
+
+                    b.HasIndex("DeliveryInfoId");
 
                     b.ToTable("Orders");
                 });
@@ -82,6 +144,10 @@ namespace S148.Backend.Domain.Migrations
 
                     b.Property<int>("ProductId")
                         .HasColumnType("integer");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<float?>("Discount")
                         .HasColumnType("real");
@@ -141,7 +207,15 @@ namespace S148.Backend.Domain.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("S148.Backend.Domain.Dto.DeliveryInfo", "DeliveryInfo")
+                        .WithMany()
+                        .HasForeignKey("DeliveryInfoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Customer");
+
+                    b.Navigation("DeliveryInfo");
                 });
 
             modelBuilder.Entity("S148.Backend.Domain.Dto.OrderDetails", b =>

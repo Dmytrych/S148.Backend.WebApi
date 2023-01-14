@@ -1,13 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using S148.Backend.Domain.Dto;
 
 namespace S148.Backend.Domain;
 
 public class DatabaseContext : DbContext, IDatabaseContext
 {
-    private const string DbConnectionStringToken = "PgSqlConnectionString";
-    private readonly string connectionString;
+    public DatabaseContext(DbContextOptions<DatabaseContext> options)
+        : base(options)
+    { }
     
     public DbSet<Order> Orders { get; set; }
 
@@ -20,16 +20,6 @@ public class DatabaseContext : DbContext, IDatabaseContext
     public DbSet<DeliveryInfo> DeliveryInfo { get; set; }
 
     public DbSet<NovaPoshtaDeliveryInfo> NovaPoshtaDeliveryInfo { get; set; }
-
-    public DatabaseContext(IConfiguration configuration)
-    {
-        connectionString = configuration[DbConnectionStringToken];
-    }
-    
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        optionsBuilder.UseNpgsql(connectionString);
-    }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

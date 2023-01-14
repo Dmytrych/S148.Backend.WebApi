@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using NovaPoshtaApi;
+using S148.Backend.Extensibility.NovaPoshta.Models;
 using S148.Backend.NovaPoshta.Extensibility.Services;
 using S148.Backend.NovaPoshta.WebApi.Dto;
 
@@ -41,11 +41,10 @@ public class DeliveryInfoApiController : ControllerBase
     [HttpGet]
     [Route("[action]")]
     public async Task<IActionResult> GetWarehouseByNumber(
-        [FromQuery]string cityGuidRef,
-        [FromQuery]string cityName,
+        [FromQuery]Guid cityGuidRef,
         [FromQuery]int warehouseNumber)
     {
-        var warehouse = await deliveryInfoService.GetWarehouseByNumberAsync(cityGuidRef, cityName, warehouseNumber);
+        var warehouse = await deliveryInfoService.GetWarehouseByNumberAsync(cityGuidRef, warehouseNumber);
 
         return warehouse.IsValid
             ? Ok(Convert(warehouse.Result))

@@ -8,5 +8,4 @@ public interface IDeliveryInfoCrudRepository: ICrudRepository<DeliveryInfoServic
     IGetCrudRepository<DeliveryInfoServiceModel, int>,
     IDeleteCrudRepository<DeliveryInfoServiceModel, int>
 {
-    
 }

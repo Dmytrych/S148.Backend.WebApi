@@ -1,5 +1,4 @@
-﻿using NovaPoshtaApi;
-using S148.Backend.Extensibility.NovaPoshta.Models;
+﻿using S148.Backend.Extensibility.NovaPoshta.Models;
 using S148.Backend.Extensibility.NovaPoshta.OnlineSettlementSearch;
 
 namespace S148.Backend.Extensibility.NovaPoshta;

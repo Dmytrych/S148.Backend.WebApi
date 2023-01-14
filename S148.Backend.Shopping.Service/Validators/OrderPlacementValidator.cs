@@ -1,5 +1,5 @@
 ﻿using S148.Backend.Extensibility;
-using S148.Backend.Shopping.Service.OrderPlacement.Dto;
+using S148.Backend.Shopping.Extensibility.OrderPlacement.Models;
 using S148.Backend.Shopping.Service.Repositories;
 
 namespace S148.Backend.Shopping.Service.Validators;

@@ -1,5 +1,4 @@
-﻿using NovaPoshtaApi;
-using S148.Backend.Extensibility;
+﻿using S148.Backend.Extensibility;
 using S148.Backend.Extensibility.NovaPoshta;
 using S148.Backend.Extensibility.NovaPoshta.Models;
 using S148.Backend.NovaPoshta.Extensibility.Repositories;
@@ -27,38 +26,17 @@ public class NovaPoshtaInfoRepository : INovaPoshtaInfoRepository
             Page = 1
         })).ToList();
 
-    public async Task<OperationResult<Warehouse>> GetWarehousesByNumberFilterAsync(string cityId, string cityName, int warehouseNumber)
+    public async Task<OperationResult<Warehouse>> GetWarehouseByNumberAsync(Guid cityGuidRef, int warehouseNumber)
     {
         var warehouses = (await novaPoshtaClient.Address.GetWarehouses(new WarehouseFilter
         {
             WarehouseId = warehouseNumber,
-            CityId = cityId,
-            Limit = 1,
-            Page = 1,
-            CityName = cityName
-        })).ToList();
-
-        var foundWarehouse = warehouses.FirstOrDefault(warehouse => warehouse.Number == warehouseNumber.ToString());
-        if (warehouses.Any() && foundWarehouse != null)
-        {
-            return new OperationResult<Warehouse>(foundWarehouse);
-        }
-
-        return new OperationResult<Warehouse>(new List<string>());
-    }
-    
-    public async Task<OperationResult<Warehouse>> GetWarehouseByNumberAsync(string cityId, string cityName, int warehouseNumber)
-    {
-        var warehouses = (await novaPoshtaClient.Address.GetWarehouses(new WarehouseFilter
-        {
-            WarehouseId = warehouseNumber,
-            CityId = cityId,
+            CityId = cityGuidRef.ToString(),
             Limit = 100,
-            Page = 1,
-            CityName = cityName
+            Page = 1
         })).ToList();
 
-        var foundWarehouse = warehouses.FirstOrDefault(warehouse => warehouse.Number == warehouseNumber.ToString());
+        var foundWarehouse = warehouses.FirstOrDefault(warehouse => warehouse.Number == warehouseNumber);
         if (warehouses.Any() && foundWarehouse != null)
         {
             return new OperationResult<Warehouse>(foundWarehouse);
@@ -67,11 +45,11 @@ public class NovaPoshtaInfoRepository : INovaPoshtaInfoRepository
         return new OperationResult<Warehouse>(new List<string>());
     }
 
-    public async Task<OperationResult<City>> GetCityByIdAsync(string cityId)
+    public async Task<OperationResult<City>> GetCityByIdAsync(Guid cityGuidRef)
     {
         var cities = (await novaPoshtaClient.Address.GetCities(new CityFilter
         {
-            CityId = cityId
+            CityId = cityGuidRef.ToString()
         })).ToList();
 
         if (cities.Any())
@@ -82,9 +60,9 @@ public class NovaPoshtaInfoRepository : INovaPoshtaInfoRepository
         return new OperationResult<City>(new List<string>());
     }
 
-    public async Task<OperationResult<Area>> GetAreaByIdAsync(string areaId)
+    public async Task<OperationResult<Area>> GetAreaByIdAsync(Guid areaGuidRef)
     {
-        var area = (await novaPoshtaClient.Address.GetAreas()).FirstOrDefault(area => area.Ref == areaId);
+        var area = (await novaPoshtaClient.Address.GetAreas()).FirstOrDefault(area => area.Ref == areaGuidRef);
         if (area != null)
         {
             return new OperationResult<Area>(area);

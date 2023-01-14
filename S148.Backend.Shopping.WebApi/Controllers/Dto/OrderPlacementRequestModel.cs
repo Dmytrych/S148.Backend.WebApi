@@ -10,5 +10,5 @@ public class OrderPlacementRequestModel
     
     public int WarehouseNumber { get; set; }
     
-    public string CityId { get; set; }
+    public string CityGuidRef { get; set; }
 }

@@ -6,12 +6,12 @@ using Microsoft.OpenApi.Models;
 using NovaPoshtaApi;
 using S148.Backend.AutofacModules;
 using S148.Backend.Domain;
-using S148.Backend.Extensibility.NovaPoshta;
 
 namespace S148.Backend
 {
     public class Startup
     {
+      private const string DbConnectionStringToken = "PgSqlConnectionString";
       private const string NovaPoshtaApiKeyToken = "NovaPoshtaApiKey";
       private const string FrontendAppUrlToken = "FrontendAppUrl";
 
@@ -27,9 +27,11 @@ namespace S148.Backend
         EncodingProvider provider = CodePagesEncodingProvider.Instance;
         Encoding.RegisterProvider(provider);
 
-        services.AddDbContext<DatabaseContext>();
+        services.AddDbContext<DatabaseContext>(
+          options => options.UseNpgsql(
+            Configuration[DbConnectionStringToken]));
         services.AddMvc().AddControllersAsServices();
-        services.AddOptions();;
+        services.AddOptions();
         services.AddSwaggerGen(c =>
         {
           c.SwaggerDoc("v1", new OpenApiInfo { Title = "webApiGitTest", Version = "v1" });
@@ -89,7 +91,13 @@ namespace S148.Backend
           endpoints.MapControllerRoute("default", "{controller=Home}/{action=Index}");
         });
 
-        var context = new DatabaseContext(Configuration);
+        using var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope();
+        using var context = serviceScope.ServiceProvider.GetService<DatabaseContext>();
+        if (context == null)
+        {
+          throw new ArgumentException("The database context was not created");
+        }
+          
         context.Database.Migrate();
       }
     }

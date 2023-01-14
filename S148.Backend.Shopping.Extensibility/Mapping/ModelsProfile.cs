@@ -13,5 +13,6 @@ public class ModelsProfile : Profile
         CreateMap<OrderDetailsServiceModel, OrderDetails>().ReverseMap();
         CreateMap<ProductServiceModel, Product>().ReverseMap();
         CreateMap<DeliveryInfoServiceModel, DeliveryInfo>().ReverseMap();
+        CreateMap<NovaPoshtaDeliveryInfoServiceModel, NovaPoshtaDeliveryInfo>().ReverseMap();
     }
 }

@@ -14,9 +14,8 @@ public class NovaPoshtaDeliveryInfoCrudRepository
 {
     public NovaPoshtaDeliveryInfoCrudRepository(
         IMapper mapper,
-        DbSet<NovaPoshtaDeliveryInfo> entities,
         IDatabaseContext databaseContext)
-        : base(mapper, entities, databaseContext)
+        : base(mapper, databaseContext.NovaPoshtaDeliveryInfo, databaseContext)
     {
     }
 

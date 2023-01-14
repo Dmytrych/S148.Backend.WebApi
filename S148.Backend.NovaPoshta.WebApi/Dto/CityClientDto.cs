@@ -6,5 +6,5 @@ public class CityClientDto
     
     public string Description { get; set; }
     
-    public string CityGuidRef { get; set; }
+    public Guid CityGuidRef { get; set; }
 }

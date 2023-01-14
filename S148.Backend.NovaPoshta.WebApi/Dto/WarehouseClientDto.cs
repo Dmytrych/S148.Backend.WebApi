@@ -4,5 +4,5 @@ public class WarehouseClientDto
 {
     public string Name { get; set; }
 
-    public string WarehouseGuidRef { get; set; }
+    public Guid WarehouseGuidRef { get; set; }
 }
