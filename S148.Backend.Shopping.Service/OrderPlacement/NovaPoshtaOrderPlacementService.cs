@@ -59,13 +59,13 @@ internal class NovaPoshtaOrderPlacementService : IOrderPlacementService<NovaPosh
         var customerInfoValidationResult = customerInfoValidator.Validate(orderData.CustomerModel);
         if (!customerInfoValidationResult.IsValid)
         {
-            throw new ArgumentException();
+            return new OperationResult<OrderPlacementResponse>(customerInfoValidationResult.ProcessResults);
         }
 
         var productValidationResult = orderContentValidator.Validate(orderData.Products);
         if (!productValidationResult.IsValid)
         {
-            throw new ArgumentException();
+            return new OperationResult<OrderPlacementResponse>(productValidationResult.ProcessResults);
         }
         
         var createdCustomer = customerCrudRepository.Create(orderData.CustomerModel);
@@ -73,7 +73,7 @@ internal class NovaPoshtaOrderPlacementService : IOrderPlacementService<NovaPosh
         var deliveryInfoCreationResult = await novaPoshtaDeliveryInfoFactory.CreateAsync(orderData);
         if (!deliveryInfoCreationResult.IsValid)
         {
-            throw new ArgumentException();
+            return new OperationResult<OrderPlacementResponse>(deliveryInfoCreationResult.ProcessResults);
         }
         
         var createdNovaPoshtaDeliveryInfo = novaPoshtaDeliveryInfoCrudRepository.Create(deliveryInfoCreationResult.Result);

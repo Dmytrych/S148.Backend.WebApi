@@ -42,7 +42,7 @@ public class NovaPoshtaInfoRepository : INovaPoshtaInfoRepository
             return new OperationResult<Warehouse>(foundWarehouse);
         }
 
-        return new OperationResult<Warehouse>(new List<string>());
+        return new OperationResult<Warehouse>();
     }
 
     public async Task<OperationResult<City>> GetCityByIdAsync(Guid cityGuidRef)
@@ -57,7 +57,7 @@ public class NovaPoshtaInfoRepository : INovaPoshtaInfoRepository
             return new OperationResult<City>(cities.First());
         }
         
-        return new OperationResult<City>(new List<string>());
+        return new OperationResult<City>();
     }
 
     public async Task<OperationResult<Area>> GetAreaByIdAsync(Guid areaGuidRef)
@@ -68,6 +68,6 @@ public class NovaPoshtaInfoRepository : INovaPoshtaInfoRepository
             return new OperationResult<Area>(area);
         }
 
-        return new OperationResult<Area>(new List<string>());
+        return new OperationResult<Area>();
     }
 }

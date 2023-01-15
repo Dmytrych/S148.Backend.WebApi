@@ -1,6 +1,5 @@
 ﻿using S148.Backend.Extensibility;
 using S148.Backend.Shopping.Extensibility.Models.Service;
-using S148.Backend.Shopping.Extensibility.OrderPlacement.Models;
 
 namespace S148.Backend.Shopping.Service.Validators;
 
@@ -8,23 +7,28 @@ internal class CustomerInfoValidator : ICustomerInfoValidator
 {
     private readonly IEmailValidator emailValidator;
     private readonly IPhoneValidator phoneValidator;
+    private readonly IOperationResultFactory operationResultFactory;
 
-    public CustomerInfoValidator(IEmailValidator emailValidator, IPhoneValidator phoneValidator)
+    public CustomerInfoValidator(
+        IEmailValidator emailValidator,
+        IPhoneValidator phoneValidator,
+        IOperationResultFactory operationResultFactory)
     {
         this.emailValidator = emailValidator;
         this.phoneValidator = phoneValidator;
+        this.operationResultFactory = operationResultFactory;
     }
 
     public OperationResult Validate(CustomerServiceModel customerInfo)
     {
         if (customerInfo == null)
         {
-            throw new ArgumentException();
+            return operationResultFactory.FromStatusCode(ShoppingProcessResultCodeNames.InvalidCustomerInfo);
         }
         
         if (!emailValidator.Validate(customerInfo.Email))
         {
-            throw new ArgumentException();
+            return operationResultFactory.FromStatusCode(ShoppingProcessResultCodeNames.InvalidEmail);
         }
 
         var trimmedName = customerInfo.Name.Trim();
@@ -34,12 +38,12 @@ internal class CustomerInfoValidator : ICustomerInfoValidator
             || string.IsNullOrEmpty(trimmedSurname)
             || string.IsNullOrEmpty(trimmedMiddleName))
         {
-            throw new ArgumentException();
+            return operationResultFactory.FromStatusCode(ShoppingProcessResultCodeNames.InvalidCredentials);
         }
 
         if (!phoneValidator.Validate(customerInfo.PhoneNumber))
         {
-            throw new ArgumentException();
+            return operationResultFactory.FromStatusCode(ShoppingProcessResultCodeNames.InvalidPhoneNumber);
         }
 
         return new OperationResult(true);

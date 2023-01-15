@@ -29,4 +29,7 @@
       <ProjectReference Include="..\S148.Backend.NovaPoshta.Module\S148.Backend.NovaPoshta.Module.csproj" />
       <ProjectReference Include="..\S148.Backend.Shopping.Module\S148.Backend.Shopping.Module.csproj" />
     </ItemGroup>
+    <ItemGroup>
+        <EmbeddedResource Include=".\processResultCodeMapping.json" />
+    </ItemGroup>
 </Project>

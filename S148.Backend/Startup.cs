@@ -1,4 +1,6 @@
-﻿using System.Text;
+﻿using System.Reflection;
+using System.Text;
+using System.Text.Json;
 using Autofac;
 using AutoMapper.Contrib.Autofac.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
@@ -6,6 +8,7 @@ using Microsoft.OpenApi.Models;
 using NovaPoshtaApi;
 using S148.Backend.AutofacModules;
 using S148.Backend.Domain;
+using S148.Backend.Extensibility.Messaging;
 
 namespace S148.Backend
 {
@@ -14,13 +17,14 @@ namespace S148.Backend
       private const string DbConnectionStringToken = "PgSqlConnectionString";
       private const string NovaPoshtaApiKeyToken = "NovaPoshtaApiKey";
       private const string FrontendAppUrlToken = "FrontendAppUrl";
+      private const string ProcessResultCodeMappingFileToken = "ProcessResultCodeMappingFile";
 
       public Startup(IConfiguration configuration)
       {
         Configuration = configuration;
       }
 
-      public IConfiguration Configuration { get; private set; }
+      private IConfiguration Configuration { get; }
 
       public void ConfigureServices(IServiceCollection services)
       {
@@ -60,8 +64,11 @@ namespace S148.Backend
 
         var assem = AppDomain.CurrentDomain.GetAssemblies();
         builder.RegisterAutoMapper(true, assem);
-
-        builder.Register(x => new ApiConnection(Configuration[NovaPoshtaApiKeyToken], NovaPoshtaClient.BaseUri)).As<IApiConnection>();
+        builder.Register(_ => new ApiConnection(Configuration[NovaPoshtaApiKeyToken], NovaPoshtaClient.BaseUri)).As<IApiConnection>();
+        
+        var processResultMapping = LoadProcessResultCodeMapping();
+        var mappingRegistry = new ProcessResultCodeRegistry(processResultMapping);
+        builder.Register(_ => mappingRegistry).As<IProcessResultCodeRegistry>();
       }
 
       public void Configure(
@@ -99,6 +106,25 @@ namespace S148.Backend
         }
           
         context.Database.Migrate();
+      }
+      
+      private IReadOnlyDictionary<string, int> LoadProcessResultCodeMapping()
+      {
+        var fileName = Configuration[ProcessResultCodeMappingFileToken];
+        var assembly = Assembly.GetExecutingAssembly();
+        
+        var embeddedMappingFilePath = assembly.GetManifestResourceNames()
+          .Single(str => str.EndsWith(fileName));
+
+        using Stream stream = assembly.GetManifestResourceStream(embeddedMappingFilePath);
+        if (stream == null)
+        {
+          throw new ArgumentException($"Could not find process result code mapping file: {fileName}");
+        }
+        
+        using StreamReader reader = new StreamReader(stream);
+
+        return JsonSerializer.Deserialize<Dictionary<string, int>>(reader.ReadToEnd());
       }
     }
 }

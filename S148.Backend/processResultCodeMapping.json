@@ -1,0 +1,9 @@
+﻿{
+  "invalidCustomerInfo": 1,
+  "invalidEmail": 2,
+  "invalidPhoneNumber": 3,
+  "invalidCredentials": 4,
+  "noProductsSelected": 5,
+  "containsInvalidProducts": 6,
+  "containsDuplicatedProducts": 7
+}
