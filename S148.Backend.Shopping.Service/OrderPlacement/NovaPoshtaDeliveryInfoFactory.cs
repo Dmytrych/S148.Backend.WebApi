@@ -1,4 +1,5 @@
 ﻿using S148.Backend.Extensibility;
+using S148.Backend.Extensibility.Messaging;
 using S148.Backend.NovaPoshta.Extensibility.Repositories;
 using S148.Backend.Shopping.Extensibility.Models.Service;
 using S148.Backend.Shopping.Extensibility.OrderPlacement.Models;
@@ -8,10 +9,15 @@ namespace S148.Backend.Shopping.Service.OrderPlacement;
 public class NovaPoshtaDeliveryInfoFactory : INovaPoshtaDeliveryInfoFactory
 {
     private readonly INovaPoshtaInfoRepository novaPoshtaInfoRepository;
+
+    private readonly IOperationResultFactory operationResultFactory;
     
-    public NovaPoshtaDeliveryInfoFactory(INovaPoshtaInfoRepository novaPoshtaInfoRepository)
+    public NovaPoshtaDeliveryInfoFactory(
+        IOperationResultFactory operationResultFactory,
+        INovaPoshtaInfoRepository novaPoshtaInfoRepository)
     {
         this.novaPoshtaInfoRepository = novaPoshtaInfoRepository;
+        this.operationResultFactory = operationResultFactory;
     }
     
     public async Task<OperationResult<NovaPoshtaDeliveryInfoServiceModel>> CreateAsync(NovaPoshtaOrderData deliveryData)
@@ -19,14 +25,14 @@ public class NovaPoshtaDeliveryInfoFactory : INovaPoshtaDeliveryInfoFactory
         var foundCity = await novaPoshtaInfoRepository.GetCityByIdAsync(deliveryData.CityGuidRef);
         if (!foundCity.IsValid || foundCity.Result == null)
         {
-            throw new ArgumentException();
+            return operationResultFactory.FromStatusCode<NovaPoshtaDeliveryInfoServiceModel>(ShoppingProcessResultCodeNames.CityNotFound);
         }
 
         var foundWarehouse =
             await novaPoshtaInfoRepository.GetWarehouseByNumberAsync(foundCity.Result.Ref, deliveryData.WarehouseNumber);
         if (!foundWarehouse.IsValid || foundWarehouse.Result == null)
         {
-            throw new AggregateException();
+            return operationResultFactory.FromStatusCode<NovaPoshtaDeliveryInfoServiceModel>(ShoppingProcessResultCodeNames.WarehouseNotFound);
         }
 
         return new OperationResult<NovaPoshtaDeliveryInfoServiceModel>(new NovaPoshtaDeliveryInfoServiceModel

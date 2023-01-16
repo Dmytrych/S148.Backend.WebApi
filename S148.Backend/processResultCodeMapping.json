@@ -5,5 +5,7 @@
   "invalidCredentials": 4,
   "noProductsSelected": 5,
   "containsInvalidProducts": 6,
-  "containsDuplicatedProducts": 7
+  "containsDuplicatedProducts": 7,
+  "cityNotFound": 8,
+  "warehouseNotFound": 9
 }

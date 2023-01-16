@@ -9,4 +9,6 @@ public static class ShoppingProcessResultCodeNames
     public const string NoProductsSelected = "noProductsSelected";
     public const string ContainsInvalidProducts = "containsInvalidProducts";
     public const string ContainsDuplicatedProducts = "containsDuplicatedProducts";
+    public const string CityNotFound = "cityNotFound";
+    public const string WarehouseNotFound = "warehouseNotFound";
 }
