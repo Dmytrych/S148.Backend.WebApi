@@ -17,6 +17,7 @@ public abstract class RestApiControllerBase<TRestModel, TRestCreateModel, TServi
         this.mapper = mapper;
     }
 
+    [NonAction]
     [HttpPost]
     [Route("[action]")]
     [SwaggerOperation("Create models")]
@@ -36,6 +37,7 @@ public abstract class RestApiControllerBase<TRestModel, TRestCreateModel, TServi
         return BadRequest(results);
     }
     
+    [NonAction]
     [HttpDelete]
     [Route("[action]")]
     [SwaggerOperation("Delete model")]
@@ -45,7 +47,8 @@ public abstract class RestApiControllerBase<TRestModel, TRestCreateModel, TServi
     {
         throw new NotImplementedException();
     }
-    
+
+    [NonAction]
     [HttpPost]
     [Route("[action]")]
     [SwaggerOperation("Update model")]
@@ -56,7 +59,7 @@ public abstract class RestApiControllerBase<TRestModel, TRestCreateModel, TServi
     {
         throw new NotImplementedException();
     }
-    
+
     [HttpGet]
     [Route("[action]")]
     [SwaggerOperation("Get model")]
