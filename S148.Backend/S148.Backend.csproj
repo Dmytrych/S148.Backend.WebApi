@@ -30,6 +30,7 @@
       <ProjectReference Include="..\S148.Backend.Shopping.Module\S148.Backend.Shopping.Module.csproj" />
     </ItemGroup>
     <ItemGroup>
-        <EmbeddedResource Include=".\processResultCodeMapping.json" />
+        <EmbeddedResource Include="Resources\processResultCodeMapping.json" />
+        <EmbeddedResource Include="Resources\Images\*.png" />
     </ItemGroup>
 </Project>

@@ -5,9 +5,11 @@ namespace S148.Backend.Domain.Dto;
 public class DeliveryInfo
 {
     public int Id { get; set; }
+    
+    public string Description { get; set; }
 
-    [ForeignKey("NovaPoshtaDeliveryInfo")]
-    public int NovaPoshtaDeliveryInfoId { get; set; }
-
-    public int NovaPoshtaDeliveryInfo { get; set; }
+    // [ForeignKey("NovaPoshtaDeliveryInfo")]
+    // public int NovaPoshtaDeliveryInfoId { get; set; }
+    //
+    // public int NovaPoshtaDeliveryInfo { get; set; }
 }

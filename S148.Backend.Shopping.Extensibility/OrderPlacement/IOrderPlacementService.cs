@@ -6,5 +6,5 @@ namespace S148.Backend.Shopping.Extensibility.OrderPlacement;
 public interface IOrderPlacementService<in TDeliveryData>
     where TDeliveryData : IOrderData
 {
-    Task<OperationResult<OrderPlacementResponse>> CreateAsync(TDeliveryData orderData);
+    OperationResult<OrderPlacementResponse> Create(TDeliveryData orderData);
 }

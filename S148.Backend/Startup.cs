@@ -14,117 +14,115 @@ namespace S148.Backend
 {
     public class Startup
     {
-      private const string DbConnectionStringToken = "PgSqlConnectionString";
-      private const string NovaPoshtaApiKeyToken = "NovaPoshtaApiKey";
-      private const string FrontendAppUrlToken = "FrontendAppUrl";
-      private const string ProcessResultCodeMappingFileToken = "ProcessResultCodeMappingFile";
+        private const string DbConnectionStringToken = "PgSqlConnectionString";
+        private const string NovaPoshtaApiKeyToken = "NovaPoshtaApiKey";
+        private const string FrontendAppUrlToken = "FrontendAppUrl";
+        private const string ProcessResultCodeMappingFileToken = "ProcessResultCodeMappingFile";
 
-      public Startup(IConfiguration configuration)
-      {
-        Configuration = configuration;
-      }
-
-      private IConfiguration Configuration { get; }
-
-      public void ConfigureServices(IServiceCollection services)
-      {
-        EncodingProvider provider = CodePagesEncodingProvider.Instance;
-        Encoding.RegisterProvider(provider);
-
-        services.AddDbContext<DatabaseContext>(
-          options => options.UseNpgsql(
-            Configuration[DbConnectionStringToken]));
-        services.AddMvc().AddControllersAsServices();
-        services.AddOptions();
-        services.AddSwaggerGen(c =>
+        public Startup(IConfiguration configuration)
         {
-          c.SwaggerDoc("v1", new OpenApiInfo { Title = "webApiGitTest", Version = "v1" });
-          c.EnableAnnotations();
-        });
-        services.AddCors(options =>
+            Configuration = configuration;
+        }
+
+        private IConfiguration Configuration { get; }
+
+        public void ConfigureServices(IServiceCollection services)
         {
-          options.AddDefaultPolicy(
-            builder =>
+            EncodingProvider provider = CodePagesEncodingProvider.Instance;
+            Encoding.RegisterProvider(provider);
+
+            services.AddDbContext<DatabaseContext>(
+                options => options.UseNpgsql(
+                    Configuration[DbConnectionStringToken]));
+            services.AddMvc().AddControllersAsServices();
+            services.AddOptions();
+            services.AddSwaggerGen(c =>
             {
-              builder
-                .WithOrigins(Configuration[FrontendAppUrlToken])
-                .AllowAnyHeader()
-                .AllowAnyMethod();
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "webApiGitTest", Version = "v1" });
+                c.EnableAnnotations();
             });
-        });
-      }
-
-      public void ConfigureContainer(ContainerBuilder builder)
-      {
-        var modules = ModuleRegistry.GetAutofacModules(Configuration);
-        foreach (var module in modules)
-        {
-          builder.RegisterModule(module);
+            services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(
+                    builder =>
+                    {
+                        builder
+                            .WithOrigins(Configuration[FrontendAppUrlToken])
+                            .AllowAnyHeader()
+                            .AllowAnyMethod();
+                    });
+            });
         }
 
-        var assem = AppDomain.CurrentDomain.GetAssemblies();
-        builder.RegisterAutoMapper(true, assem);
-        builder.Register(_ => new ApiConnection(Configuration[NovaPoshtaApiKeyToken], NovaPoshtaClient.BaseUri)).As<IApiConnection>();
-        
-        var processResultMapping = LoadProcessResultCodeMapping();
-        var mappingRegistry = new ProcessResultCodeRegistry(processResultMapping);
-        builder.Register(_ => mappingRegistry).As<IProcessResultCodeRegistry>();
-      }
-
-      public void Configure(
-        IApplicationBuilder app,
-        IWebHostEnvironment env)
-      {
-        if (env.IsDevelopment())
+        public void ConfigureContainer(ContainerBuilder builder)
         {
-          app.UseDeveloperExceptionPage();
-          app.UseSwagger();
-          app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "webApiGitTest v1"));
+            var modules = ModuleRegistry.GetAutofacModules(Configuration);
+            foreach (var module in modules)
+            {
+                builder.RegisterModule(module);
+            }
+
+            var assem = AppDomain.CurrentDomain.GetAssemblies();
+            builder.RegisterAutoMapper(true, assem);
+            builder.Register(_ => new ApiConnection(Configuration[NovaPoshtaApiKeyToken], NovaPoshtaClient.BaseUri))
+                .As<IApiConnection>();
+
+            var processResultMapping = LoadProcessResultCodeMapping();
+            var mappingRegistry = new ProcessResultCodeRegistry(processResultMapping);
+            builder.Register(_ => mappingRegistry).As<IProcessResultCodeRegistry>();
         }
-        
-        app.UseCors();
-        app.UseExceptionHandler("/Error");
-        app.UseHsts();
 
-        var builder = WebApplication.CreateBuilder();
-        builder.Host.ConfigureLogging(logging =>
+        public void Configure(
+            IApplicationBuilder app,
+            IWebHostEnvironment env)
         {
-          logging.AddConsole();
-        });
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+                app.UseSwagger();
+                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "webApiGitTest v1"));
+            }
 
-        app.UseRouting();
-        app.UseEndpoints(endpoints =>
-        {
-          endpoints.MapControllerRoute("default", "{controller=Home}/{action=Index}");
-        });
+            app.UseCors();
+            app.UseExceptionHandler("/Error");
+            app.UseHsts();
 
-        using var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope();
-        using var context = serviceScope.ServiceProvider.GetService<DatabaseContext>();
-        if (context == null)
-        {
-          throw new ArgumentException("The database context was not created");
+            var builder = WebApplication.CreateBuilder();
+            builder.Host.ConfigureLogging(logging => { logging.AddConsole(); });
+
+            app.UseRouting();
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllerRoute("default", "{controller=Home}/{action=Index}");
+            });
+
+            using var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope();
+            using var context = serviceScope.ServiceProvider.GetService<DatabaseContext>();
+            if (context == null)
+            {
+                throw new ArgumentException("The database context was not created");
+            }
+
+            context.Database.Migrate();
         }
-          
-        context.Database.Migrate();
-      }
-      
-      private IReadOnlyDictionary<string, int> LoadProcessResultCodeMapping()
-      {
-        var fileName = Configuration[ProcessResultCodeMappingFileToken];
-        var assembly = Assembly.GetExecutingAssembly();
-        
-        var embeddedMappingFilePath = assembly.GetManifestResourceNames()
-          .Single(str => str.EndsWith(fileName));
 
-        using Stream stream = assembly.GetManifestResourceStream(embeddedMappingFilePath);
-        if (stream == null)
+        private IReadOnlyDictionary<string, int> LoadProcessResultCodeMapping()
         {
-          throw new ArgumentException($"Could not find process result code mapping file: {fileName}");
-        }
-        
-        using StreamReader reader = new StreamReader(stream);
+            var fileName = Configuration[ProcessResultCodeMappingFileToken];
+            var assembly = Assembly.GetExecutingAssembly();
 
-        return JsonSerializer.Deserialize<Dictionary<string, int>>(reader.ReadToEnd());
-      }
+            var embeddedMappingFilePath = assembly.GetManifestResourceNames()
+                .Single(str => str.EndsWith(fileName));
+
+            using Stream stream = assembly.GetManifestResourceStream(embeddedMappingFilePath);
+            if (stream == null)
+            {
+                throw new ArgumentException($"Could not find process result code mapping file: {fileName}");
+            }
+
+            using StreamReader reader = new StreamReader(stream);
+
+            return JsonSerializer.Deserialize<Dictionary<string, int>>(reader.ReadToEnd());
+        }
     }
 }

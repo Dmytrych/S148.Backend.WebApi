@@ -19,11 +19,11 @@ public class OrderPlacementApiController : ControllerBase
 
     [HttpPost]
     [Route($"{NovaPoshtaDeliveryActionName}/[action]")]
-    public async Task<IActionResult> Create([FromBody]NovaPoshtaOrderData orderData)
+    public IActionResult Create([FromBody]NovaPoshtaOrderData orderData)
     {
         try
         {
-            var creationResult = await novaPoshtaOrderPlacementService.CreateAsync(orderData);
+            var creationResult = novaPoshtaOrderPlacementService.Create(orderData);
             return Ok(creationResult);
         }
         catch

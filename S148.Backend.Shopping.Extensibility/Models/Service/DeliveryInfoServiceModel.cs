@@ -4,5 +4,5 @@ public class DeliveryInfoServiceModel
 {
     public int Id { get; set; }
 
-    public int NovaPoshtaDeliveryInfoId { get; set; }
+    public string Description { get; set; }
 }

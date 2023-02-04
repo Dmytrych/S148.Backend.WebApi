@@ -5,20 +5,16 @@ namespace S148.Backend.Shopping.Extensibility.OrderPlacement.Models;
 public class NovaPoshtaOrderData : IOrderData
 {
     public NovaPoshtaOrderData(
-        int warehouseNumber,
-        Guid cityGuidRef,
+        string description,
         CustomerServiceModel customerModel,
         IReadOnlyCollection<ProductOrderingInfo> products)
     {
-        WarehouseNumber = warehouseNumber;
-        CityGuidRef = cityGuidRef;
+        Description = description;
         CustomerModel = customerModel;
         Products = products;
     }
     
-    public int WarehouseNumber { get; set; }
-
-    public Guid CityGuidRef { get; set; }
+    public string Description { get; set; }
 
     public CustomerServiceModel CustomerModel { get; set; }
 

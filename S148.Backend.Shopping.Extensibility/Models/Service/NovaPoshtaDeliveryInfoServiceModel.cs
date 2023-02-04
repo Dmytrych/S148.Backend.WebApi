@@ -13,8 +13,10 @@ public class NovaPoshtaDeliveryInfoServiceModel
     public string AreaName { get; set; }
     
     public Guid AreaRef { get; set; }
+
+    public string WarehouseInfo { get; set; }
     
-    public int WarehouseNumber { get; set; }
+    public bool CourierDelivery { get; set; }
     
-    public string WarehouseDescription { get; set; }
+    public string CourierDeliveryInfo { get; set; }
 }

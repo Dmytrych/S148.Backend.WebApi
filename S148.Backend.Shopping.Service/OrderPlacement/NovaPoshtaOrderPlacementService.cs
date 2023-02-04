@@ -10,15 +10,11 @@ namespace S148.Backend.Shopping.Service.OrderPlacement;
 
 internal class NovaPoshtaOrderPlacementService : IOrderPlacementService<NovaPoshtaOrderData>
 {
-    private readonly INovaPoshtaDeliveryInfoFactory novaPoshtaDeliveryInfoFactory;
-
     private readonly ICustomerInfoValidator customerInfoValidator;
 
     private readonly IOrderContentValidator orderContentValidator;
 
     private readonly ICustomerCrudRepository customerCrudRepository;
-
-    private readonly INovaPoshtaDeliveryInfoCrudRepository novaPoshtaDeliveryInfoCrudRepository;
 
     private readonly IOrderCrudRepository orderRepository;
 
@@ -31,22 +27,18 @@ internal class NovaPoshtaOrderPlacementService : IOrderPlacementService<NovaPosh
     private readonly IDeliveryInfoCrudRepository deliveryInfoCrudRepository;
 
     public NovaPoshtaOrderPlacementService(
-        INovaPoshtaDeliveryInfoFactory novaPoshtaDeliveryInfoFactory,
         ICustomerInfoValidator customerInfoValidator,
         IOrderContentValidator orderContentValidator,
         ICustomerCrudRepository customerCrudRepository,
-        INovaPoshtaDeliveryInfoCrudRepository novaPoshtaDeliveryInfoCrudRepository,
         IOrderCrudRepository orderRepository,
         IProductRepository productRepository,
         IOrderDetailsCrudRepository orderDetailsRepository,
         IOrderPriceCounter orderPriceCounter,
         IDeliveryInfoCrudRepository deliveryInfoCrudRepository)
     {
-        this.novaPoshtaDeliveryInfoFactory = novaPoshtaDeliveryInfoFactory;
         this.customerInfoValidator = customerInfoValidator;
         this.orderContentValidator = orderContentValidator;
         this.customerCrudRepository = customerCrudRepository;
-        this.novaPoshtaDeliveryInfoCrudRepository = novaPoshtaDeliveryInfoCrudRepository;
         this.orderRepository = orderRepository;
         this.productRepository = productRepository;
         this.orderDetailsRepository = orderDetailsRepository;
@@ -54,7 +46,7 @@ internal class NovaPoshtaOrderPlacementService : IOrderPlacementService<NovaPosh
         this.deliveryInfoCrudRepository = deliveryInfoCrudRepository;
     }
     
-    public async Task<OperationResult<OrderPlacementResponse>> CreateAsync(NovaPoshtaOrderData orderData)
+    public OperationResult<OrderPlacementResponse> Create(NovaPoshtaOrderData orderData)
     {
         var customerInfoValidationResult = customerInfoValidator.Validate(orderData.CustomerModel);
         if (!customerInfoValidationResult.IsValid)
@@ -70,26 +62,18 @@ internal class NovaPoshtaOrderPlacementService : IOrderPlacementService<NovaPosh
         
         var createdCustomer = customerCrudRepository.Create(orderData.CustomerModel);
 
-        var deliveryInfoCreationResult = await novaPoshtaDeliveryInfoFactory.CreateAsync(orderData);
-        if (!deliveryInfoCreationResult.IsValid)
-        {
-            return new OperationResult<OrderPlacementResponse>(deliveryInfoCreationResult.ProcessResults);
-        }
-        
-        var createdNovaPoshtaDeliveryInfo = novaPoshtaDeliveryInfoCrudRepository.Create(deliveryInfoCreationResult.Result);
-
         var createdDeliveryInfo = deliveryInfoCrudRepository.Create(new DeliveryInfoServiceModel
         {
-            NovaPoshtaDeliveryInfoId = createdNovaPoshtaDeliveryInfo.Id
+            Description = orderData.Description
         });
-        
+
         var order = new OrderServiceModel
         {
             CustomerId = createdCustomer.Id,
             DeliveryInfoId = createdDeliveryInfo.Id
         };
         var createdOrder = orderRepository.Create(order);
-        
+
         var createdOrderDetails = new List<OrderDetailsServiceModel>();
         foreach (var product in orderData.Products)
         {

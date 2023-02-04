@@ -26,13 +26,13 @@ public class ShoppingServiceAutofacModule : Module
         BindValidators(builder);
         BindCounters(builder);
         BindServices(builder);
-        BindFactories(builder);
+        // BindFactories(builder);
     }
 
-    private void BindFactories(ContainerBuilder builder)
-    {
-        builder.RegisterType<NovaPoshtaDeliveryInfoFactory>().As<INovaPoshtaDeliveryInfoFactory>();
-    }
+    // private void BindFactories(ContainerBuilder builder)
+    // {
+    //     builder.RegisterType<NovaPoshtaDeliveryInfoFactory>().As<INovaPoshtaDeliveryInfoFactory>();
+    // }
 
     private void BindServices(ContainerBuilder builder)
     {
@@ -51,7 +51,7 @@ public class ShoppingServiceAutofacModule : Module
         builder.RegisterType<CustomerCrudRepository>().As<ICustomerCrudRepository>();
         builder.RegisterType<OrderDetailsCrudRepository>().As<IOrderDetailsCrudRepository>();
         builder.RegisterType<DeliveryInfoCrudRepository>().As<IDeliveryInfoCrudRepository>();
-        builder.RegisterType<NovaPoshtaDeliveryInfoCrudRepository>().As<INovaPoshtaDeliveryInfoCrudRepository>();
+        //builder.RegisterType<NovaPoshtaDeliveryInfoCrudRepository>().As<INovaPoshtaDeliveryInfoCrudRepository>();
 
         builder.RegisterType<ProductRepository>().As<IProductRepository>();
     }
@@ -61,7 +61,6 @@ public class ShoppingServiceAutofacModule : Module
         builder.RegisterType<EmailValidator>().As<IEmailValidator>();
         builder.RegisterType<PhoneValidator>().As<IPhoneValidator>();
         builder.RegisterType<CustomerInfoValidator>().As<ICustomerInfoValidator>();
-        builder.RegisterType<OrderPlacementValidator>().As<IOrderPlacementValidator>();
         builder.RegisterType<OrderContentValidator>().As<IOrderContentValidator>();
     }
 }
