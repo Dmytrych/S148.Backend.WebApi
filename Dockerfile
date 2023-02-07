@@ -5,9 +5,8 @@ EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
-COPY ["S148.Backend/S148.Backend.csproj", "S148.Backend/"]
-RUN dotnet restore "S148.Backend/S148.Backend.csproj"
 COPY . .
+RUN dotnet restore "S148.Backend/S148.Backend.csproj"
 WORKDIR "/src/S148.Backend"
 RUN dotnet build "S148.Backend.csproj" -c Release -o /app/build
 

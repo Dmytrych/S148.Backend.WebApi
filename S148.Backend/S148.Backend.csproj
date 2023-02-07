@@ -31,6 +31,5 @@
     </ItemGroup>
     <ItemGroup>
         <EmbeddedResource Include="Resources\processResultCodeMapping.json" />
-        <EmbeddedResource Include="Resources\Images\*.png" />
     </ItemGroup>
 </Project>
