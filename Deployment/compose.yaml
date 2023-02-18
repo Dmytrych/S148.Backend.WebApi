@@ -2,11 +2,27 @@ services:
   nginx:
     container_name: nginx
     restart: always
+    depends_on:
+      - postgres
+      - s148
     build:
       context: ./nginx
       dockerfile: ./Dockerfile
     ports:
       - "8080:80"
+
+  s148:
+    container_name: S148
+    restart: always
+    env_file:
+        - .env
+    depends_on:
+      - postgres
+    build:
+      context: ../
+      dockerfile: ./Dockerfile
+    ports:
+      - "3001:80"
 
   postgres:
     container_name: postgres_db
@@ -14,8 +30,11 @@ services:
     restart: always
     volumes:
       - postgres_volume:/var/lib/postgresql/data
+    ports:
+      - "1001:5432"
     environment:
       POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: postgres
 
 volumes:
   postgres_volume:

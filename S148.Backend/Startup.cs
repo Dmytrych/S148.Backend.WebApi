@@ -33,7 +33,7 @@ namespace S148.Backend
 
             services.AddDbContext<DatabaseContext>(
                 options => options.UseNpgsql(
-                    Configuration[DbConnectionStringToken]));
+                    Configuration.GetConnectionString(DbConnectionStringToken)));
             services.AddMvc().AddControllersAsServices();
             services.AddOptions();
             services.AddSwaggerGen(c =>
@@ -79,9 +79,9 @@ namespace S148.Backend
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "webApiGitTest v1"));
             }
+            app.UseSwagger();
+            app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "webApiGitTest v1"));
 
             app.UseCors();
             app.UseExceptionHandler("/Error");
