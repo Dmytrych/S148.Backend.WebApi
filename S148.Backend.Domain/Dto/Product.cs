@@ -8,10 +8,5 @@ public class Product
 
     public string Name { get; set; }
 
-    [ForeignKey("Image")]
-    public int ImageId { get; set; }
-
-    public Image Image { get; set; }
-
     public decimal UnitPrice { get; set; }
 }
