@@ -14,4 +14,8 @@
         </PackageReference>
         <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="6.0.6" />
     </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\S148.Backend.Extensibility\S148.Backend.Extensibility.csproj" />
+    </ItemGroup>
 </Project>

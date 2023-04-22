@@ -1,16 +1,21 @@
-﻿using S148.Backend.Extensibility;
+﻿
+using ErrorOr;
 
 namespace S148.Backend.RestApi.Extensibility;
 
-public interface ICrudService<TServiceModel, in TFilter>
+public interface ICrudService<TServiceModel, in TFilter> : ICrudService<TServiceModel, TFilter, int>
 {
-    OperationResult<TServiceModel> Create(TServiceModel model);
+}
 
-    OperationResult<TServiceModel> Update(TServiceModel model);
+public interface ICrudService<TServiceModel, in TFilter, TIdentifier>
+{
+    ErrorOr<TServiceModel> Create(TServiceModel model);
 
-    OperationResult Delete(int id);
+    ErrorOr<TServiceModel> Update(TServiceModel model);
 
-    TServiceModel Get(int id);
+    Error Delete(TIdentifier id);
+
+    TServiceModel Get(TIdentifier id);
 
     IReadOnlyCollection<TServiceModel> GetAll(TFilter filter);
 }

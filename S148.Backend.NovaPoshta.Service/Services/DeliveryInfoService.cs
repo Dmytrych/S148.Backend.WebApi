@@ -1,4 +1,5 @@
-﻿using S148.Backend.Extensibility;
+﻿using ErrorOr;
+using S148.Backend.Extensibility;
 using S148.Backend.Extensibility.NovaPoshta.Models;
 using S148.Backend.NovaPoshta.Extensibility.Repositories;
 using S148.Backend.NovaPoshta.Extensibility.Services;
@@ -24,9 +25,9 @@ public class DeliveryInfoService : IDeliveryInfoService
         return (await infoRepository.GetCitiesByName(nameFilter)).ToList();
     }
 
-    public async Task<OperationResult<Warehouse>> GetWarehouseByNumberAsync(Guid cityId, int warehouseId)
+    public async Task<ErrorOr<Warehouse>> GetWarehouseByNumberAsync(Guid cityId, int warehouseId)
         => await infoRepository.GetWarehouseByNumberAsync(cityId, warehouseId);
 
-    public async Task<OperationResult<Area>> GetArea(Guid areaGuidRef)
+    public async Task<ErrorOr<Area>> GetArea(Guid areaGuidRef)
         => await infoRepository.GetAreaByIdAsync(areaGuidRef);
 }

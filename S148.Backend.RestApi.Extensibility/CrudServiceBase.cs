@@ -1,9 +1,17 @@
-﻿using S148.Backend.Extensibility;
+﻿using ErrorOr;
 using S148.Backend.RestApi.Extensibility.Repositories;
 
 namespace S148.Backend.RestApi.Extensibility;
 
-public abstract class CrudServiceBase<TServiceModel, TFilter> : ICrudService<TServiceModel, TFilter>
+public abstract class CrudServiceBase<TServiceModel, TFilter> : CrudServiceBase<TServiceModel, TFilter, int>, ICrudService<TServiceModel, TFilter>
+{
+    protected CrudServiceBase(ICrudRepository<TServiceModel, TFilter> crudRepository)
+        : base(crudRepository)
+    {
+    }
+}
+
+public abstract class CrudServiceBase<TServiceModel, TFilter, TIdentifier> : ICrudService<TServiceModel, TFilter, TIdentifier>
 {
     private readonly ICrudRepository<TServiceModel, TFilter> crudRepository;
     
@@ -12,22 +20,22 @@ public abstract class CrudServiceBase<TServiceModel, TFilter> : ICrudService<TSe
         this.crudRepository = crudRepository;
     }
 
-    public OperationResult<TServiceModel> Create(TServiceModel model)
+    public ErrorOr<TServiceModel> Create(TServiceModel model)
     {
         throw new NotImplementedException();
     }
     
-    public OperationResult<TServiceModel> Update(TServiceModel model)
+    public ErrorOr<TServiceModel> Update(TServiceModel model)
     {
         throw new NotImplementedException();
     }
     
-    public OperationResult Delete(int id)
+    public Error Delete(TIdentifier id)
     {
         throw new NotImplementedException();
     }
 
-    public abstract TServiceModel Get(int id);
+    public abstract TServiceModel Get(TIdentifier id);
 
     public virtual IReadOnlyCollection<TServiceModel> GetAll(TFilter filter)
         => crudRepository.GetAll(filter);

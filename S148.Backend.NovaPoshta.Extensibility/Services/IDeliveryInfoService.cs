@@ -1,4 +1,4 @@
-﻿using S148.Backend.Extensibility;
+﻿using ErrorOr;
 using S148.Backend.Extensibility.NovaPoshta.Models;
 
 namespace S148.Backend.NovaPoshta.Extensibility.Services;
@@ -7,7 +7,7 @@ public interface IDeliveryInfoService
 {
     Task<IReadOnlyCollection<City>> GetCitiesAsync(string nameFilter);
 
-    Task<OperationResult<Warehouse>> GetWarehouseByNumberAsync(Guid cityId, int warehouseId);
+    Task<ErrorOr<Warehouse>> GetWarehouseByNumberAsync(Guid cityId, int warehouseId);
 
-    Task<OperationResult<Area>> GetArea(Guid areaGuidRef);
+    Task<ErrorOr<Area>> GetArea(Guid areaGuidRef);
 }

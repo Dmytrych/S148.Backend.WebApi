@@ -1,0 +1,14 @@
+﻿[
+  {
+    "Id": 1,
+    "Name": "S148 - 200мл",
+    "UnitPrice": 250.50,
+    "ImageName": "85ecfb42-f0ba-4b4a-81a7-bd4ccc5fcbef.png"
+  },
+  {
+    "Id": 2,
+    "Name": "S148 - 100мл",
+    "UnitPrice": 110,
+    "ImageName": "d556282d-e19c-40fe-9f10-0ac016c53a8a.png"
+  }
+]

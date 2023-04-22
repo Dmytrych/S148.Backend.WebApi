@@ -13,4 +13,8 @@
         <ProjectReference Include="..\S148.Backend.NovaPoshta.Domain\S148.Backend.NovaPoshta.Domain.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="ErrorOr" Version="1.2.1" />
+    </ItemGroup>
+
 </Project>

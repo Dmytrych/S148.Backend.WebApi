@@ -1,6 +1,4 @@
-﻿using System.Reflection;
-using System.Text;
-using System.Text.Json;
+﻿using System.Text;
 using Autofac;
 using AutoMapper.Contrib.Autofac.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
@@ -8,17 +6,12 @@ using Microsoft.OpenApi.Models;
 using NovaPoshtaApi;
 using S148.Backend.AutofacModules;
 using S148.Backend.Domain;
-using S148.Backend.Extensibility.Messaging;
+using S148.Backend.Extensibility;
 
 namespace S148.Backend
 {
     public class Startup
     {
-        private const string DbConnectionStringToken = "PgSqlConnectionString";
-        private const string NovaPoshtaApiKeyToken = "NovaPoshtaApiKey";
-        private const string FrontendAppUrlToken = "FrontendAppUrl";
-        private const string ProcessResultCodeMappingFileToken = "ProcessResultCodeMappingFile";
-
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -33,7 +26,7 @@ namespace S148.Backend
 
             services.AddDbContext<DatabaseContext>(
                 options => options.UseNpgsql(
-                    Configuration.GetConnectionString(DbConnectionStringToken)));
+                    Configuration.GetConnectionString(ConfigurationTokens.DbConnectionStringToken)));
             services.AddMvc().AddControllersAsServices();
             services.AddOptions();
             services.AddSwaggerGen(c =>
@@ -47,7 +40,7 @@ namespace S148.Backend
                     builder =>
                     {
                         builder
-                            .WithOrigins(Configuration[FrontendAppUrlToken])
+                            .WithOrigins(Configuration[ConfigurationTokens.FrontendAppUrlToken])
                             .AllowAnyHeader()
                             .AllowAnyMethod();
                     });
@@ -64,12 +57,8 @@ namespace S148.Backend
 
             var assem = AppDomain.CurrentDomain.GetAssemblies();
             builder.RegisterAutoMapper(true, assem);
-            builder.Register(_ => new ApiConnection(Configuration[NovaPoshtaApiKeyToken], NovaPoshtaClient.BaseUri))
+            builder.Register(_ => new ApiConnection(Configuration[ConfigurationTokens.NovaPoshtaApiKeyToken], NovaPoshtaClient.BaseUri))
                 .As<IApiConnection>();
-
-            var processResultMapping = LoadProcessResultCodeMapping();
-            var mappingRegistry = new ProcessResultCodeRegistry(processResultMapping);
-            builder.Register(_ => mappingRegistry).As<IProcessResultCodeRegistry>();
         }
 
         public void Configure(
@@ -104,25 +93,6 @@ namespace S148.Backend
             }
 
             context.Database.Migrate();
-        }
-
-        private IReadOnlyDictionary<string, int> LoadProcessResultCodeMapping()
-        {
-            var fileName = Configuration[ProcessResultCodeMappingFileToken];
-            var assembly = Assembly.GetExecutingAssembly();
-
-            var embeddedMappingFilePath = assembly.GetManifestResourceNames()
-                .Single(str => str.EndsWith(fileName));
-
-            using Stream stream = assembly.GetManifestResourceStream(embeddedMappingFilePath);
-            if (stream == null)
-            {
-                throw new ArgumentException($"Could not find process result code mapping file: {fileName}");
-            }
-
-            using StreamReader reader = new StreamReader(stream);
-
-            return JsonSerializer.Deserialize<Dictionary<string, int>>(reader.ReadToEnd());
         }
     }
 }

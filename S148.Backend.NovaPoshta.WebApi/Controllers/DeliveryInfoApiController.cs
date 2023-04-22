@@ -46,8 +46,8 @@ public class DeliveryInfoApiController : ControllerBase
     {
         var warehouse = await deliveryInfoService.GetWarehouseByNumberAsync(cityGuidRef, warehouseNumber);
 
-        return warehouse.IsValid
-            ? Ok(Convert(warehouse.Result))
+        return !warehouse.IsError
+            ? Ok(Convert(warehouse.Value))
             : NotFound();
     }
 
@@ -57,9 +57,9 @@ public class DeliveryInfoApiController : ControllerBase
 
         var fullName = string.Concat(city.SettlementTypeDescription, " ", city.Description);
 
-        if (area.IsValid)
+        if (!area.IsError)
         {
-            fullName = string.Concat(fullName, ", ", area.Result.Description, " ", AreaString, " ");
+            fullName = string.Concat(fullName, ", ", area.Value.Description, " ", AreaString, " ");
         }
 
         return new CityClientDto

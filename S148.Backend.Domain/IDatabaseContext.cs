@@ -12,8 +12,6 @@ public interface IDatabaseContext
 
     DbSet<Product> Products { get; set; }
 
-    public DbSet<Image> Images { get; set; }
-
     DbSet<OrderDetails> OrderDetails { get; set; }
     
     DbSet<DeliveryInfo> DeliveryInfo { get; set; }

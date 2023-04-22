@@ -11,7 +11,6 @@
         <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="8.0.0" />
         <PackageReference Include="AutoMapper" Version="11.0.1" />
         <PackageReference Include="AutoMapper.Contrib.Autofac.DependencyInjection" Version="6.1.0" />
-        <PackageReference Include="DotNetEnv" Version="2.5.0" />
         <PackageReference Include="Microsoft.AspNetCore.Cors" Version="2.2.0" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.8">
           <PrivateAssets>all</PrivateAssets>
@@ -29,8 +28,5 @@
       <ProjectReference Include="..\S148.Backend.Domain\S148.Backend.Domain.csproj" />
       <ProjectReference Include="..\S148.Backend.NovaPoshta.Module\S148.Backend.NovaPoshta.Module.csproj" />
       <ProjectReference Include="..\S148.Backend.Shopping.Module\S148.Backend.Shopping.Module.csproj" />
-    </ItemGroup>
-    <ItemGroup>
-        <EmbeddedResource Include="Resources\processResultCodeMapping.json" />
     </ItemGroup>
 </Project>

@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace S148.Backend.Domain.Dto;
 
@@ -7,6 +8,8 @@ public class Product
     public int Id { get; set; }
 
     public string Name { get; set; }
+    
+    public string ImageName { get; set; }
 
     public decimal UnitPrice { get; set; }
 }

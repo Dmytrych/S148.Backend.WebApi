@@ -29,7 +29,7 @@ public abstract class RestApiControllerBase<TRestModel, TRestCreateModel, TServi
         var serviceModels = models.Select(Convert).ToList();
         var results = serviceModels.Select(crudService.Create);
 
-        if (results.Any(result => result.IsValid))
+        if (results.Any(result => !result.IsError))
         {
             return Ok(results);
         }

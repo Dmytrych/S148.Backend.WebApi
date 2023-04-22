@@ -1,5 +1,4 @@
 ﻿using Autofac;
-using S148.Backend.Extensibility;
 using S148.Backend.Extensibility.NovaPoshta;
 using S148.Backend.Extensibility.NovaPoshta.Models;
 using S148.Backend.Extensibility.NovaPoshta.OnlineSettlementSearch;
@@ -16,8 +15,6 @@ namespace S148.Backend.AutofacModules
             builder.RegisterType<LimitableAddressClient>().As<ILimitableAddressClient>();
             builder.RegisterType<CustomNovaPoshtaClient>().As<ICustomNovaPoshtaClient>();
             builder.RegisterType<QuickCitySearchClient>().As<IQuickCitySearchClient>();
-
-            builder.RegisterType<OperationResultFactory>().As<IOperationResultFactory>();
         }
 
         private void BindParameterCreators(ContainerBuilder builder)

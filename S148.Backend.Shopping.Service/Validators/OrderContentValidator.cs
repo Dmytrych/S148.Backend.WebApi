@@ -1,4 +1,5 @@
-﻿using S148.Backend.Extensibility;
+﻿using ErrorOr;
+using S148.Backend.Extensibility;
 using S148.Backend.Shopping.Extensibility.OrderPlacement.Models;
 using S148.Backend.Shopping.Service.Repositories;
 
@@ -8,31 +9,26 @@ internal class OrderContentValidator : IOrderContentValidator
 {
     private readonly IProductRepository productRepository;
 
-    private readonly IOperationResultFactory operationResultFactory;
-    
-    public OrderContentValidator(
-        IOperationResultFactory operationResultFactory,
-        IProductRepository productRepository)
+    public OrderContentValidator(IProductRepository productRepository)
     {
         this.productRepository = productRepository;
-        this.operationResultFactory = operationResultFactory;
     }
     
-    public OperationResult Validate(IReadOnlyCollection<ProductOrderingInfo> products)
+    public ErrorOr<Success> Validate(IReadOnlyCollection<ProductOrderingInfo> products)
     {
         if (products.IsNullOrEmpty())
         {
-            return operationResultFactory.FromStatusCode(ShoppingProcessResultCodeNames.NoProductsSelected);
+            return Error.NotFound("No products given");
         }
         
         var allProductIds = productRepository.GetAll();
         if (!products.All(product => allProductIds.Contains(product.ProductId)))
         {
-            return operationResultFactory.FromStatusCode(ShoppingProcessResultCodeNames.ContainsInvalidProducts);
+            return Error.NotFound("The cart contains non-existing products");
         }
 
         return products.DistinctBy(p => p.ProductId).Count() != products.Count
-            ? operationResultFactory.FromStatusCode(ShoppingProcessResultCodeNames.ContainsDuplicatedProducts)
-            : new OperationResult(true);
+            ? Error.Validation("The cart contains duplicated products")
+            : Result.Success;
     }
 }

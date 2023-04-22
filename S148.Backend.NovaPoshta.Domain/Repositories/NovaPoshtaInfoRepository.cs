@@ -1,4 +1,4 @@
-﻿using S148.Backend.Extensibility;
+﻿using ErrorOr;
 using S148.Backend.Extensibility.NovaPoshta;
 using S148.Backend.Extensibility.NovaPoshta.Models;
 using S148.Backend.NovaPoshta.Extensibility.Repositories;
@@ -15,7 +15,7 @@ public class NovaPoshtaInfoRepository : INovaPoshtaInfoRepository
     }
 
     public async Task<IReadOnlyCollection<City>> GetCitiesByName(string name)
-        => (await novaPoshtaClient.Address.GetCitiesByName(name)).ToList();
+        => (await novaPoshtaClient.Address.GetCitiesByName(name))?.ToList();
 
     public async Task<IReadOnlyCollection<Warehouse>> GetWarehouses(string cityId, string cityName, int limit)
         => (await novaPoshtaClient.Address.GetWarehouses(new WarehouseFilter
@@ -26,7 +26,7 @@ public class NovaPoshtaInfoRepository : INovaPoshtaInfoRepository
             Page = 1
         })).ToList();
 
-    public async Task<OperationResult<Warehouse>> GetWarehouseByNumberAsync(Guid cityGuidRef, int warehouseNumber)
+    public async Task<ErrorOr<Warehouse>> GetWarehouseByNumberAsync(Guid cityGuidRef, int warehouseNumber)
     {
         var warehouses = (await novaPoshtaClient.Address.GetWarehouses(new WarehouseFilter
         {
@@ -36,38 +36,38 @@ public class NovaPoshtaInfoRepository : INovaPoshtaInfoRepository
             Page = 1
         })).ToList();
 
-        var foundWarehouse = warehouses.FirstOrDefault(warehouse => warehouse.Number == warehouseNumber);
-        if (warehouses.Any() && foundWarehouse != null)
+        var foundWarehouse = warehouses?.FirstOrDefault(warehouse => warehouse.Number == warehouseNumber);
+        if (foundWarehouse == null)
         {
-            return new OperationResult<Warehouse>(foundWarehouse);
+            return Error.NotFound($"The warehouse with number {warehouseNumber} was not found");
         }
 
-        return new OperationResult<Warehouse>();
+        return foundWarehouse;
     }
 
-    public async Task<OperationResult<City>> GetCityByIdAsync(Guid cityGuidRef)
+    public async Task<ErrorOr<City>> GetCityByIdAsync(Guid cityGuidRef)
     {
         var cities = (await novaPoshtaClient.Address.GetCities(new CityFilter
         {
             CityId = cityGuidRef.ToString()
         })).ToList();
 
-        if (cities.Any())
+        if (cities == null || !cities.Any())
         {
-            return new OperationResult<City>(cities.First());
+            return Error.NotFound("The city was not found");
         }
         
-        return new OperationResult<City>();
+        return cities.First();
     }
 
-    public async Task<OperationResult<Area>> GetAreaByIdAsync(Guid areaGuidRef)
+    public async Task<ErrorOr<Area>> GetAreaByIdAsync(Guid areaGuidRef)
     {
-        var area = (await novaPoshtaClient.Address.GetAreas()).FirstOrDefault(area => area.Ref == areaGuidRef);
-        if (area != null)
+        var area = (await novaPoshtaClient.Address.GetAreas())?.FirstOrDefault(area => area.Ref == areaGuidRef);
+        if (area == null)
         {
-            return new OperationResult<Area>(area);
+            return Error.NotFound("The area was not found");
         }
 
-        return new OperationResult<Area>();
+        return area;
     }
 }

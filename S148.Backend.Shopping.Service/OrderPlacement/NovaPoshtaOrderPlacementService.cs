@@ -1,4 +1,4 @@
-﻿using S148.Backend.Extensibility;
+﻿using ErrorOr;
 using S148.Backend.Shopping.Extensibility.Models.Service;
 using S148.Backend.Shopping.Extensibility.OrderPlacement;
 using S148.Backend.Shopping.Extensibility.OrderPlacement.Models;
@@ -46,18 +46,24 @@ internal class NovaPoshtaOrderPlacementService : IOrderPlacementService<NovaPosh
         this.deliveryInfoCrudRepository = deliveryInfoCrudRepository;
     }
     
-    public OperationResult<OrderPlacementResponse> Create(NovaPoshtaOrderData orderData)
+    public ErrorOr<OrderPlacementResponse> Create(NovaPoshtaOrderData orderData)
     {
+        var errors = new List<Error>();
+        
         var customerInfoValidationResult = customerInfoValidator.Validate(orderData.CustomerModel);
-        if (!customerInfoValidationResult.IsValid)
+        errors.AddRange(customerInfoValidationResult.Errors);
+
+        if (customerInfoValidationResult.IsError)
         {
-            return new OperationResult<OrderPlacementResponse>(customerInfoValidationResult.ProcessResults);
+            return errors;
         }
 
         var productValidationResult = orderContentValidator.Validate(orderData.Products);
-        if (!productValidationResult.IsValid)
+        errors.AddRange(productValidationResult.Errors);
+
+        if (productValidationResult.IsError)
         {
-            return new OperationResult<OrderPlacementResponse>(productValidationResult.ProcessResults);
+            return errors;
         }
         
         var createdCustomer = customerCrudRepository.Create(orderData.CustomerModel);
@@ -88,11 +94,11 @@ internal class NovaPoshtaOrderPlacementService : IOrderPlacementService<NovaPosh
 
             createdOrderDetails.Add(orderDetailsRepository.Create(orderDetails));
         }
-        
-        return new OperationResult<OrderPlacementResponse>(new OrderPlacementResponse
+
+        return new OrderPlacementResponse
         {
             OrderId = createdOrder.Id,
             TotalPrice = orderPriceCounter.GetTotalPrice(createdOrderDetails)
-        });
+        };
     }
 }
